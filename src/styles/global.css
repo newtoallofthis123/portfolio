@@ -7,6 +7,11 @@
     color: #000;
 }
 
+.dark ::selection{
+    background: #83fbff;
+    color: #312f2f;
+}
+
 body{
     line-height: 1.7;
 }

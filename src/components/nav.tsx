@@ -5,9 +5,9 @@ type Props = {
 
 export default function Nav({ title, emoji }: Props) {
     return (
-        <nav className="flex flex-row justify-between items-center p-2 border-2 border-neutral-200 my-4">
+        <nav className="flex md:flex-row flex-col justify-between items-center p-2 border-2 dark:border-dark border-neutral-200 my-4">
             <div>
-                <a href="/" className="p-1 text-xl bg-red font-bold">
+                <a href="/" className="p-1 text-xl bg-mred font-bold">
                     <span className="text-white bg-dark px-3">{emoji ?? '@'}</span> {title ?? 'NoobScience'}
                 </a>
             </div>
@@ -16,7 +16,7 @@ export default function Nav({ title, emoji }: Props) {
                     <a
                         href={`/${item}`}
                         key={index}
-                        className="mx-2 hover:bg-yellow hover:text-dark p-1"
+                        className="mx-2 hover:bg-myellow hover:text-dark p-1"
                     >
                         {item}
                     </a>

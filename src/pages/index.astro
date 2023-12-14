@@ -14,20 +14,21 @@ const posts = await getCollection('blog');
     <h1 class="text-xl">
         Hi Internet Friend! I am <Bold>The Noob!</Bold>
     </h1>
-    <div id="banner" class="pt-2">
-        <pre>
-	<span class="text-blue">____</span>     __                       __           __    _ 
-   /  _/____/ /_  ____<span class="text-purple"> _____         / /___  _____/ /_  (_)</span>
-   / //<span class="text-green"> ___/ __ \/ __</span> `/ __ <span class="text-yellow">\   __  / / __ \/ ___/ __ \/ / </span>
+    <div id="banner" class="my-2 dark:text-dark text-white">
+        <pre class="text-mx md:text-lg">
+	<span class="text-mblue dark:text-blue-700">____</span>     __                       __           __    _ 
+   /  _/____/ /_  ____<span class="text-mpurple dark:text-purple-700"> _____         / /___  _____/ /_  (_)</span>
+   / //<span class="text-green"> ___/ __ \/ __</span> `/ __ <span class="text-myellow dark:text-yellow-700">\   __  / / __ \/ ___/ __ \/ / </span>
  _/ /(__  <span class="text-orange">) / / / /_/ / / / /  / /_/ </span>/ /_/ (__  ) / / / /  
-<span class="text-blue">/___/____/_/ /_/\_</span>_,_/_/ /_/   \<span class="text-red">____/\____/____/_/ /_/_/</span>
+<span class="text-mblue dark:text-blue-700">/___/____/_/ /_/\_</span>_,_/_/ /_/   \<span class="text-mred">____/\____/____/_/ /_/_/</span>
 		</pre>
-        <p>
-            I am a <HightLight>
-                <span id="inline-icon" set:html={siGo.svg} /> Backend Developer</HightLight> and <span id="inline-icon" set:html={siLinux.svg} />
-             Linux Enthusiast based in India.
-        </p>
     </div>
+    <p>
+        I am a <HightLight>
+            <span id="inline-icon" set:html={siGo.svg} /> Backend Developer
+        </HightLight> and <span id="inline-icon" set:html={siLinux.svg} />
+         Linux Enthusiast based in India.
+    </p>
     <div class="mt-2">
         <p class="leading-7">
             Over the past 3 years, I have dedicated my time and whatever
@@ -40,17 +41,19 @@ const posts = await getCollection('blog');
             now.
         </p>
     </div>
-    <div class="my-5 w-2/3">
-        <h2 class="pb-3 text-2xl font-bold"><Char /> show_blog_posts();</h2>
+    <div class="my-5 md:w-2/3 w-full">
+        <h2 class="pb-3 md:text-2xl text-xl font-bold"><Char /> show_blog_posts();</h2>
         <div>
             {
                 posts.slice(0, 3).map((post) => (
                     <div class="pb-2 flex flex-row items-baseline justify-between gap-x-4">
                         <h2 class="underline decoration-0.5 decoration-dotted">
-                            <Link href={`/blog/${post.slug}`}>{post.data.title}</Link>
+                            <Link href={`/blog/${post.slug}`}>
+                                {post.data.title}
+                            </Link>
                         </h2>
-                        <p class="text-neutral-200">
-                            {new Date(post.data.date).toDateString()}
+                        <p class="text-neutral-200 dark:text-neutral-700">
+                            {new Date(post.data.date).toLocaleDateString()}
                         </p>
                     </div>
                 ))
@@ -58,7 +61,7 @@ const posts = await getCollection('blog');
         </div>
     </div>
     <div>
-        <h2 class="text-2xl mt-5 mb-3">
+        <h2 class="md:text-2xl text-xl mt-5 mb-3">
             <Bold><Char /> grab_attention_of_gold_fish();</Bold>
         </h2>
         <span class="bg-violet-300 p-1 text-black">Wanna play a game?</span>

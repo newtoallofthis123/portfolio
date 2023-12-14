@@ -1,4 +1,4 @@
-<article id="md">
+<article class="dark:text-dark text-white" id="md">
     <slot />
 </article>
 <style is:inline>
@@ -6,7 +6,6 @@
         font-family: 'JetBrains Mono Variable', 'Courier New', Courier, monospace;
     }
     article p {
-        color: #fcfcfc;
         font-size: 1rem;
         font-weight: 400;
         padding: 0.5rem 0;
@@ -54,6 +53,10 @@
         background-color: inherit;
         padding: 0.15rem;
         border-radius: 0.25rem;
+    }
+
+    .dark article p code {
+        color: rgb(250, 31, 90);
     }
 
     article li code {
