@@ -1,0 +1,29 @@
+---
+import { siGithub } from 'simple-icons';
+import Base from '../../layouts/base.astro';
+import Char from '../../spans/char.astro';
+import Highlight from '../../spans/highlight.astro';
+import Link from '../../spans/link.astro';
+---
+
+<Base title="Ishan's Projects">
+    <div>
+        <h1 class="text-2xl font-bold pt-2 pb-4">
+            <Char char='#' /> projects_showcase();
+        </h1>
+        <div>
+            <p class="pb-2">
+                {'>'} Which Programmer doesn't have a <Highlight>Projects</Highlight> page? - Web Devs
+            </p>
+            <p class="leading-7">
+                I consider myself a generalist, I like to work on a lot of things and have laid my hand on basically anything I can.
+                However, I only ever consider languages that I made actual viable projects in as languages I know. So, here are the projects I am proud of.
+                You can check out the languages I know <Link href="/languages">here</Link> (or just scroll down).
+            </p>
+            <p class="text-neutral-200 mt-2">
+                PS: They are all open source <Link href="/rss.xml"><span id="inline-icon" set:html={siGithub.svg}></span> Github</Link>
+                (like obviously, I am a FOSS guy).
+            </p>
+        </div>
+    </div>
+</Base>

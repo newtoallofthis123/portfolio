@@ -1,0 +1,9 @@
+---
+export interface Props{
+    char?: string
+}
+
+const {char} = Astro.props
+---
+
+<span class="text-black bg-yellow px-3">{char ?? '>'}</span>

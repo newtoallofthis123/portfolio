@@ -1,0 +1,38 @@
+---
+export interface Props{
+    title?: string;
+    emoji?: string;
+}
+
+const {title, emoji} = Astro.props;
+
+import '@fontsource-variable/jetbrains-mono';
+import 'bootstrap-icons/font/bootstrap-icons.min.css';
+import Nav from '../components/nav';
+
+import '../styles/global.css'
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+    <title>
+        { title ?? "NoobScience" }  
+    </title>
+</head>
+<body class="bg-dark text-white font-mono">
+    <main class="flex flex-col justify-center items-center">
+        <div class="w-3/5">
+	        <Nav emoji={emoji} client:load />
+            <div class="p-4 my-5 border-neutral-100 border-2">
+                <slot />
+            </div>
+        </div>
+    </main>
+</body>
+</html>

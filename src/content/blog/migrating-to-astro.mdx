@@ -1,0 +1,209 @@
+---
+title: Migrating My Site To Astro
+date: 2023-06-24
+author: Ishan
+emoji: A
+layout: "../../layouts/blog_post.astro"
+description: I recently migrated my site from Next.js to Astro. In this post, I'll be talking about why I did that and how I did that.
+tags: ["development", "cloud", "maintenance", "devstories"]
+img: "../../assets/astro.webp"
+---
+
+It feels good doesn't it? You've just finished building your website and you're ready to show it off to the world. You've got your domain, your hosting, and your site is live.
+When we as developers build a website, we expect it to work seamlessly for the rest of time.
+Now this might be true for a static website, which is hosted on a CDN and doesn't have any backend code.
+However, most sites now a days are dynamic, and have some sort of backend code, which is where the complexities of maintainance come in.
+Now it is not really the backend which is to blame. I sometimes find even the frontend to be a pain to maintain.
+Especially the front ends which are built using meta frameworks like Gatsby, Next, Nuxt, etc.
+Dynamic and interactive websites are great, but they come with a cost.
+
+## Why I was Migrating My Site
+
+This was when my site was built using Next.js and I was using a custom CMS I made using MonoDB to manage the content.
+Now this was a very small dynamicity, but it was still a pain to maintain.
+I also had to make sure that I don't exceed the free tier of MongoDB Atlas, which was a pain.
+I had to make all sort of changes to the SWR hooks to make sure that the site doesn't make too many requests to the database.
+After all this too, the site was rather slow at times and on top of that, the site was 500GB in size.
+
+The thing was, the reason I had to introduce this dynamicity was because I wanted to make the content on my site easily manageable.
+I wanted to be able to add new quips (called updates) to my site without having to make a new commit to my site.
+However, this would be one of the best examples of over engineering.
+I didn't have to make a whole CMS for this.
+Now trust me, it was fun to make the CMS, but it was not worth it.
+It slowed my site terribly and most of the libraries that were used to render the markdown I was storing in the database were not working properly with Next.js's new server components.
+Moreover, as I will be talking more about later, writing the code using messy scss and weird React hooks made the code really hard to maintain.
+I reliazed that in the age of static site generators, I was using a meta framework to build a simple site, with very little dynamicity.
+
+So, I decided to migrate my site to a static site generator.
+The only question was which one?
+
+## Why I Chose Astro
+
+I had used Gatsby in the past, but I didn't really enjoy it.
+Gatsby is an excellent for high performance, commercial sites, but it is not really suited for personal sites.
+I mean, it is, but it was not for me.
+It was a bit too complex to set up. Powerful, but complex.
+This would then, once again lead to over engineering.
+Hence, I wanted to use something which was simple, yet powerful.
+I had already learned and proved that I could build a site using Next.js, so I wanted to try something new.
+I had heard about Astro, and I decided to give it a shot.
+
+Astro is a static site generator which is really unique.
+It provides a lot of features which are not available in other static site generators.
+For one, it feels very natural for a Web developer to use Astro.
+You can write normal HTML, CSS, and JS in Astro.
+However, what makes Astro unique is that it allows you to use React components in your HTML.
+Not just react components, but you can use any framework in your HTML.
+This is because Astro is framework agnostic.
+This means that you can use any framework you want in your Astro site.
+Astro uses the concept of islands, which are basically components that can be rendered using a framework of your choice.
+This is a much cleaner way of doing things, as you don't have to worry about all the messy code.
+
+Hence, Astro seemed like a good choice for me.
+So, with that, I started migrating my site to Astro.
+However, before that, I needed to identify the pain points in my site.
+This would help me not make the same mistakes again.
+With that, let's talk about the pain points I identified in my site. 
+
+## The Pain Points
+
+In any analysis, the first step is to identify the pain points.
+Now, you might multiple pain points in your site, but you need to identify the ones which are the most important.
+So pain points I found in my site were:
+
+1. Migrating from page/ to app/ in Next.js
+2. The messy scss
+3. Long repetitive code
+4. Really slow build times
+5. Easily Breakable code
+
+Now these all might sound sort of a given, but let me explain why these were pain points for me.
+First off, with the release of Next.js 13.4 and the release of the app/ directory, I had to migrate my site from page/ to app/.
+This was easier said then done, as I had a lot of problems with the messy scss my was using.
+This led me to using weird React hooks to make sure that the site was responsive.
+It was now a pain to migrate to the new server components, as I had to make sure that the site was responsive.
+This led to a whole lot of making new directories, layouts and components.
+I actually did the whole thing before finally deciding that this site was not worth maintaining.
+This is what the final result would be if you don't take proper steps to write clean and maintainable code.
+
+You might have different pain points, but these were the ones I had, which turn out to be quite common in Next.js sites.
+So, let's talk about how I solved these pain points.
+
+## How I Solved These Pain Points
+
+The first pain point was the migration from page/ to app/.
+This was solved de facto by moving to Astro.
+Astro has a much cleaner syntax and a much cleaner way of doing things.
+It uses the concept of islands, which are basically components.
+These islands can be used to create layouts, pages, and components.
+This is a much cleaner way of doing things, as you don't have to worry about the messy scss.
+You can just use the built in classes to style your site.
+This was perfect for me, so I decided to move to Astro.
+
+The second pain point was the messy scss.
+The main issue I faced was that I had written a lot of weird React Hooks to manage the responsiveness of the site.
+This was primarily because I was writing bad css and scss.
+So, for my new site, I decided to use Tailwind CSS.
+I had used tailwindcss in the past, but I didn't really enjoyed it.
+However, I decided to give it another shot and I'm glad I did.
+I now use Tailwind CSS as my de facto css framework.
+
+The third pain point was the long repetitive code.
+This was solved by using the concept of islands in Astro.
+I now have a layout for my blog posts, a layout for my projects, and a layout for my home page.
+This has made my code much cleaner and much more maintainable.
+I also have a layout for my 404 page, which is a nice touch.
+Tailwind CSS also helps with this, as I don't have to write long repetitive css code.
+I can just use the built in classes to style my site.
+
+The fourth pain point was the really slow build times.
+This was solved by using Astro.
+Astro has a really fast build time, which is a huge plus.
+It also has a really fast dev server, which is also a huge plus.
+This has made my development process much faster and much more enjoyable.
+I can now make changes to my site and see them instantly.
+The build time was very slow in Next.js, which was a huge pain.
+
+The fifth pain point was the easily breakable code.
+Till now, Astro has been really good at this.
+I haven't had any issues with the code breaking.
+Tailwind CSS also helps with this, as I don't have to worry about the css breaking.
+All in all, Astro is an amazing framework and I'm glad I decided to use it.
+
+## Deploying The Switch
+
+Now that I had decided to move to Astro, I had to figure out how to deploy it.
+I had initally planned on using netlify and I had even set up a netlify.toml file.
+But, I decided to go with Vercel, as I found it to be much easier to use.
+
+I had to make a few changes to my site to make it work with Vercel.
+Which was relatively very easy.
+All you had to do is the vercel's server adapter and you're good to go.
+Which you can do by running the following command:
+
+```bash
+npx astro add vercel
+```
+
+It's that simple.
+The vercel server adapter, however, only starts to work when you deploy your site.
+So, you'll have to deploy your site to see it in action.
+When you are developing locally, you can use the default server adapter, which is the node server adapter.
+
+## So, is Astro it?
+
+Well, it is hard to say.
+I have been using Astro for a while now and I have to say, I'm really enjoying it.
+It had been far easier to maintain my site with Astro than it was with Next.js.
+However, this is true for a site with very little dynamicity.
+When I am working on a site with a lot of dynamicity, I will probably use Next.js.
+It is just easier to do so.
+
+However, if you are working on a site with very little dynamicity, Astro is the way to go.
+It is much easier to maintain and it is much easier to deploy.
+Moreover, if you site has no dynamicity at all, you can also deploy it as a static site.
+This is a huge plus, as you don't have to worry about the server costs.
+You can just deploy it as a static site and you're good to go.
+
+However, I can't say that Astro is the best framework out there.
+The JavaScript ecosystem is huge and there are a lot of frameworks out there.
+It is continuously evolving and there are a lot of new frameworks coming out every day.
+So, my advice would be to try out a few frameworks and see which one works best for you.
+The thing however, is that with so many frameworks out there, it is quite easy to migrate from one to another.
+This is because most of the frameworks use the same concepts.
+So, if you know one framework, you can easily migrate to another.
+
+## My site now
+
+So, this site you are currently reading is built using Astro.
+I use a few islands to create the layout of the site.
+Most importantly the Nav, Footer.
+I have still kept a few pages from the old site, like the updates and the url shortener.
+These have the same database as the old site, so I didn't have to change anything.
+I just had to make sure that they are migrated to Astro and rewritten using tailwindcss.
+This site is till in beta, but Astro has helped me add a lot of new features to it.
+I was also able to improve it's SEO and performance a lot.
+Since most of the site is static, it is also very fast.
+
+You might have also noticed the blog you are currently reading.
+I am quite proud of it. I was able to incorporate suggested posts, tags, and a lot of other features.
+I was also able to improve the SEO of the blog a lot.
+So, you now get the title and image of the blog when you share it on social media.
+This is a huge plus, as it helps with the discoverability of the blog.
+One more thing that Astro helped me is with the code blocks.
+I was able to add syntax highlighting to the code blocks, which is a huge plus.
+This makes the blog much more readable and much more enjoyable.
+
+I am quite happy with the way the site has turned out.
+I'll write another post about the site when it is out of beta. 
+
+## Conclusion
+
+So, that's it for this post.
+I know this post was relatively weird, but I just wanted to share my experience with Astro.
+The main takeaway from this post is that you should try out a few frameworks and see which one works best for you.
+Also, I hope my method of identifying pain points and solving them was helpful.
+If you have any questions, feel free to reach out to me on [Twitter](https://twitter.com/noobscience1).
+Also, if you want to check out my site which I built using Astro, you can do so [here](https://beta.noobscience.rocks).
+
+Thanks for reading, Hope you have a great day!

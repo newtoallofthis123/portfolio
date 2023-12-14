@@ -1,0 +1,7 @@
+---
+import { UTILS_URL } from '../../consts'
+
+const {slug} = Astro.params;
+
+return Astro.redirect(UTILS_URL + '/go/' + slug);
+---
