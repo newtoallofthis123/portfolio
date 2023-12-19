@@ -7,10 +7,6 @@ const {slug} = Astro.params;
 
 const post = await getEntry('blog', slug as string)
 
-if(post?.data.draft){
-    return Astro.redirect('/blog')
-}
-
 // @ts-ignore
 const { Content } = await post?.render();
 
