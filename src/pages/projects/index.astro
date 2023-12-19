@@ -1,5 +1,18 @@
 ---
-import { siGithub } from 'simple-icons';
+import {
+    siGithub,
+    siGo,
+    siHtml5,
+    siLetsencrypt,
+    siNextdotjs,
+    siPostgresql,
+    siPrisma,
+    siPython,
+    siRedis,
+    siRust,
+    siTailwindcss,
+    siTypescript,
+} from 'simple-icons';
 import Base from '../../layouts/base.astro';
 import Char from '../../spans/char.astro';
 import Highlight from '../../spans/highlight.astro';
@@ -9,20 +22,144 @@ import Link from '../../spans/link.astro';
 <Base title="Ishan's Projects">
     <div>
         <h1 class="text-2xl font-bold pt-2 pb-4">
-            <Char char='#' /> projects_showcase();
+            <Char char="#" /> projects_showcase();
         </h1>
         <div>
             <p class="pb-2">
-                {'>'} Which Programmer doesn't have a <Highlight>Projects</Highlight> page? - Web Devs
+                {'>'} Which Programmer doesn't have a <Highlight>
+                    Projects</Highlight> page? - Web Devs
             </p>
             <p class="leading-7">
-                I consider myself a generalist, I like to work on a lot of things and have laid my hand on basically anything I can.
-                However, I only ever consider languages that I made actual viable projects in as languages I know. So, here are the projects I am proud of.
-                You can check out the languages I know <Link href="/languages">here</Link> (or just scroll down).
+                I consider myself a generalist, I like to work on a lot of
+                things and have laid my hand on basically anything I can.
+                However, I only ever consider languages that I made actual
+                viable projects in as languages I know. So, here are the
+                projects I am proud of. You can check out the languages I know <Link
+                    href="/languages"
+                >
+                    here</Link> (or just scroll down).
             </p>
-            <p class="text-neutral-200 dark:text-neutral-600 mt-2">
-                PS: They are all open source <Link href="/rss.xml"><span id="inline-icon" set:html={siGithub.svg}></span> Github</Link>
-                (like obviously, I am a FOSS guy).
+            <p class="dark:text-neutral-200 text-neutral-600 mt-2">
+                PS: They are all open source <Link href="/rss.xml">
+                    <span id="inline-icon" set:html={siGithub.svg} /> Github
+                </Link>
+                 (like obviously, I am a FOSS guy).
+            </p>
+        </div>
+    </div>
+    <div>
+        <h2 class="text-2xl font-bold my-4">
+            <Char char="#" /> cool_projects();
+        </h2>
+        <p>
+            Well I was primarily a <Highlight>Web Developer</Highlight> for a
+            long time, so I have a lot of projects in this category. Worked on
+            moderately complex stuff, but am still proud of the first <Link
+                href="https://codepen.io/noobscience123/pen/oNWBQGB"
+            >
+                HTML
+            </Link> page I made.
+        </p>
+        <p class="dark:text-neutral-200 text-neutral-600 mt-2">
+                Click on the titles to go to the project's Github page.
+            </p>
+        <div class="mt-1">
+            <h3 class="text-lg font-bold pt-4 pb-1 underline decoration-4">
+                <a href="https://github.com/newtoallofthis123/noob_text"
+                    >NoobText</a
+                >
+            </h3>
+            <p>
+                NoobText is a high performant full stack web app built using
+                <span id="inline-icon" set:html={siGo.svg} /> Golang and <span
+                    id="inline-icon"
+                    set:html={siHtml5.svg}
+                /> HTMX. I also used <span
+                    id="inline-icon"
+                    set:html={siRedis.svg}
+                /> Redis for caching and implemented a <Highlight>
+                    Web Architecture
+                </Highlight> that I am proud of.
+            </p>
+        </div>
+        <div class="mt-1">
+            <h3 class="text-lg font-bold pt-4 pb-1 underline decoration-4">
+                <a href="https://github.com/newtoallofthis123/clarity"
+                    >Clarity</a
+                >
+            </h3>
+            <p>
+                Clarity is a <Highlight>Full Stack</Highlight> web app built
+                using the popular <Link href="https://create.t3.gg">
+                    create-T3-app
+                </Link> which uses
+                <span id="inline-icon" set:html={siTypescript.svg} /> TypeScript
+                and <span id="inline-icon" set:html={siNextdotjs.svg} /> NextJs.
+                It uses <span id="inline-icon" set:html={siTailwindcss.svg} />
+                 TailwindCSS for styling and <span
+                    id="inline-icon"
+                    set:html={siPrisma.svg}
+                /> Prisma for the database.
+            </p>
+        </div>
+        <div class="mt-3">
+            <h3 class="text-xl font-bold pt-4 pb-1 underline decoration-4">
+                <a href="https://github.com/newtoallofthis123/doc_cache"
+                    >Doc Cache</a
+                >
+            </h3>
+            <p>
+                DocCache is a hospital management system built using the <Highlight
+                >JAMStack</Highlight> architecture. It uses <span
+                    id="inline-icon"
+                    set:html={siNextdotjs.svg}
+                /> NextJs and <span
+                    id="inline-icon"
+                    set:html={siTailwindcss.svg}
+                /> TailwindCSS for the frontend and <span
+                    id="inline-icon"
+                    set:html={siPostgresql.svg}
+                /> PostgreSQL for the database and <span
+                    id="inline-icon"
+                    set:html={siGo.svg}
+                /> Golang for the backend.
+            </p>
+        </div>
+        <div class="mt-1">
+            <h3 class="text-xl font-bold pt-4 pb-1 underline decoration-4">
+                <a href="https://github.com/newtoallofthis123/envn">Envn</a>
+            </h3>
+            <p>
+                Envn is a <Highlight>CLI</Highlight> tool built using <span
+                    id="inline-icon"
+                    set:html={siRust.svg}
+                /> Rust. It is a simple tool that allows you to manage your
+                environment variables in a .env file. It uses <span id="inline-icon" set:html={siLetsencrypt.svg}></span> encryption to
+                store your secrets and is very easy to use.
+            </p>
+        </div>
+        <div class="mt-1">
+            <h3 class="text-xl font-bold pt-4 pb-1 underline decoration-4">
+                <a href="https://github.com/newtoallofthis123/handler">Noob Handler</a>
+            </h3>
+            <p>
+                Noob Handler is a CLI tool built using <span
+                    id="inline-icon"
+                    set:html={siRust.svg}
+                /> Rust. I use it as a <Highlight>CMS</Highlight> for my blog. Learn more about it <Link href="/blog/cms">here</Link>.
+                It is honestly one of my favorite projects and my first ever CLI tool.
+            </p>
+        </div>
+        <div class="mt-1">
+            <h3 class="text-xl font-bold pt-4 pb-1 underline decoration-4">
+                <a href="https://github.com/newtoallofthis123/ytps">YTPS</a>
+            </h3>
+            <p>
+                YTPS is one of my earliest projects. It is a tool built using <span
+                    id="inline-icon"
+                    set:html={siPython.svg}
+                /> Python. It is a simple tool that allows you to <Highlight>search for YouTube</Highlight> videos from the terminal.
+                Just search for a video and it will show a nice list of videos to choose from.
             </p>
         </div>
     </div>

@@ -25,14 +25,22 @@ import '../styles/global.css'
         { title ?? "NoobScience" }  
     </title>
 </head>
-<body class="bg-dark text-white dark:bg-cool dark:text-dark font-mono">
+<body class="dark:bg-dark dark:text-white bg-cool text-dark font-mono">
     <main class="flex flex-col justify-center items-center">
         <div class="md:w-3/5 w-full md:p-0 p-2">
 	        <Nav emoji={emoji} client:load />
-            <div class="p-4 my-5 dark:border-dark border-neutral-100 border-2">
+            <div class="md:p-4 p-1 pt-2 md:my-5 border-dark dark:border-neutral-100 md:border-2">
                 <slot />
             </div>
         </div>
     </main>
 </body>
+<script>
+    // dark mode
+    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+    if(prefersDarkScheme.matches){
+        // add dark mode class to html
+        document.documentElement.classList.add('dark');
+    }
+</script>
 </html>

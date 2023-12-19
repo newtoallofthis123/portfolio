@@ -5,8 +5,11 @@ import { Image } from 'astro:assets';
 
 const {slug} = Astro.params;
 
-const blog = getCollection('blog')
 const post = await getEntry('blog', slug as string)
+
+if(post?.data.draft){
+    return Astro.redirect('/blog')
+}
 
 // @ts-ignore
 const { Content } = await post?.render();
@@ -22,7 +25,7 @@ const meta = post?.data;
         <p class="mt-2">
             {meta?.description}
         </p>
-        <p class="mt-2 text-md text-neutral-200 dark:text-neutral-700">
+        <p class="mt-2 text-md dark:text-neutral-200 text-neutral-700">
             Posted on {
                 meta?.date ? new Date(meta.date).toDateString() : null
             }

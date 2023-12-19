@@ -5,7 +5,8 @@ import Highlight from '../../spans/highlight.astro';
 import Link from '../../spans/link.astro';
 import { getCollection } from 'astro:content';
 
-const posts = await getCollection('blog');
+let posts = await getCollection('blog');
+posts = posts.filter((post) => !post.data.draft);
 ---
 
 <Base>
@@ -23,7 +24,7 @@ const posts = await getCollection('blog');
                 always interesting (At least I hope so). So, grab a cup of <i class="bi bi-cup"></i> coffee
                 and enjoy the read.
             </p>
-            <p class="text-neutral-200 dark:text-neutral-600 mt-2">
+            <p class="dark:text-neutral-200 text-neutral-600 mt-2">
                 PS: You can use the power of <Link href="/rss.xml">RSS</Link>
                 here.
             </p>
@@ -32,7 +33,7 @@ const posts = await getCollection('blog');
     <h2 class="py-4 text-xl font-bold">
         <Char char="~" /> posts.sorted();
     </h2>
-    <div class="w-2/3">
+    <div class="md:w-2/3 md:p-0 pr-2">
         {
             posts.map((post) => (
                 <div class="pb-2 flex flex-row items-baseline justify-between gap-x-4">

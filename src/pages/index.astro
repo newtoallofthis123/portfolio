@@ -7,20 +7,21 @@ import Link from '../spans/link.astro';
 import { getCollection } from 'astro:content';
 import Char from '../spans/char.astro';
 
-const posts = await getCollection('blog');
+let posts = await getCollection('blog');
+posts = posts.filter((post) => !post.data.draft);
 ---
 
 <Base>
     <h1 class="text-xl">
         Hi Internet Friend! I am <Bold>The Noob!</Bold>
     </h1>
-    <div id="banner" class="my-2 dark:text-dark text-white">
+    <div id="banner" class="my-2 text-dark dark:text-white">
         <pre class="text-mx md:text-lg">
-	<span class="text-mblue dark:text-blue-700">____</span>     __                       __           __    _ 
-   /  _/____/ /_  ____<span class="text-mpurple dark:text-purple-700"> _____         / /___  _____/ /_  (_)</span>
-   / //<span class="text-green"> ___/ __ \/ __</span> `/ __ <span class="text-myellow dark:text-yellow-700">\   __  / / __ \/ ___/ __ \/ / </span>
+	<span class="dark:text-mblue text-blue-700">____</span>     __                       __           __    _ 
+   /  _/____/ /_  ____<span class="dark:text-mpurple text-purple-700"> _____         / /___  _____/ /_  (_)</span>
+   / //<span class="text-green"> ___/ __ \/ __</span> `/ __ <span class="dark:text-myellow text-yellow-700">\   __  / / __ \/ ___/ __ \/ / </span>
  _/ /(__  <span class="text-orange">) / / / /_/ / / / /  / /_/ </span>/ /_/ (__  ) / / / /  
-<span class="text-mblue dark:text-blue-700">/___/____/_/ /_/\_</span>_,_/_/ /_/   \<span class="text-mred">____/\____/____/_/ /_/_/</span>
+<span class="dark:text-mblue text-blue-700">/___/____/_/ /_/\_</span>_,_/_/ /_/   \<span class="text-mred">____/\____/____/_/ /_/_/</span>
 		</pre>
     </div>
     <p>
@@ -52,7 +53,7 @@ const posts = await getCollection('blog');
                                 {post.data.title}
                             </Link>
                         </h2>
-                        <p class="text-neutral-200 dark:text-neutral-700">
+                        <p class="dark:text-neutral-200 text-neutral-700">
                             {new Date(post.data.date).toLocaleDateString()}
                         </p>
                     </div>

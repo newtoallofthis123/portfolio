@@ -4,9 +4,13 @@ const {href} = Astro.props;
 
 <a class="underline decoration-dotted hover:bg-white hover:text-black p-0.5 hover:no-underline" href={href}><slot /></a>
 <style>
-    a:hover{
+    .dark a:hover{
         background: #f9f9f9;
         color: #000;
         padding: 0.1rem;
+    }
+    a:hover{
+        background: #1f1f1f;
+        color: #fff;
     }
 </style>

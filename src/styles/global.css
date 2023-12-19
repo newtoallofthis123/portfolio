@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-::selection{
+.dark ::selection{
     background: #f2f2f2;
     color: #000;
 }
 
-.dark ::selection{
+::selection{
     background: #83fbff;
     color: #312f2f;
 }
