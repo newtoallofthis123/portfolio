@@ -9,6 +9,7 @@ import Char from '../spans/char.astro';
 
 let posts = await getCollection('blog');
 posts = posts.filter((post) => !post.data.draft);
+posts = posts.reverse()
 ---
 
 <Base>

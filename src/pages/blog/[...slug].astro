@@ -14,8 +14,8 @@ const meta = post?.data;
 ---
 
 <Base title={meta?.title} emoji={meta?.emoji}>
-    <div class="px-2">
-        <h1 class="text-4xl font-black">
+    <div class="md:px-2">
+        <h1 class="md:text-4xl text-3xl font-black">
             {meta?.title}
         </h1>
         <p class="mt-2">
@@ -40,7 +40,7 @@ const meta = post?.data;
             }
         </div>
     </div>
-    <div class="md:px-4">
+    <div class="md:px-2">
         <Content />
     </div>
 </Base>
