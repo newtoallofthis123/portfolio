@@ -16,10 +16,11 @@ export default defineConfig({
     markdown: {
         gfm: true,
         shikiConfig: {
-            theme: 'dark-plus',
+            theme: 'rose-pine-moon',
             langs: [
                 'javascript',
                 'html',
+                'php',
                 'css',
                 'typescript',
                 'tsx',
