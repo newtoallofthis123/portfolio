@@ -6,6 +6,7 @@ export default {
         extend: {
             fontFamily: {
                 mono: ['"JetBrains Mono Variable"', 'ui-monospace'],
+                sans: ['"Inter Variable", Arial, sans-serif'],
             },
             colors: {
                 dark: '#1a1a1a',

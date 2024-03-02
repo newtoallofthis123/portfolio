@@ -7,6 +7,7 @@ export interface Props{
 const {title, emoji} = Astro.props;
 
 import '@fontsource-variable/jetbrains-mono';
+import '@fontsource-variable/inter';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
 import Nav from '../components/nav';
 
@@ -25,7 +26,7 @@ import '../styles/global.css'
         { title ?? "NoobScience" }  
     </title>
 </head>
-<body class="dark:bg-dark dark:text-white bg-cool text-dark font-mono">
+<body class="dark:bg-dark dark:text-neutral-300 bg-cool text-dark font-mono">
     <main class="flex flex-col justify-center items-center">
         <div class="md:w-3/5 w-full md:p-0 p-2">
 	        <Nav emoji={emoji} client:load />

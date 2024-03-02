@@ -15,7 +15,7 @@ export default function Nav({ title, emoji }: Props) {
                 </a>
             </div>
             <div>
-                {['projects', 'blog', 'stuff', 'contact'].map((item, index) => (
+                {['projects', 'blog', 'now', 'stuff', 'contact'].map((item, index) => (
                     <a
                         href={`/${item}`}
                         key={index}
