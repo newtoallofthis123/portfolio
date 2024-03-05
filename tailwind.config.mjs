@@ -8,21 +8,26 @@ export default {
                 mono: ['"JetBrains Mono Variable"', 'ui-monospace'],
                 sans: ['"Inter Variable", Arial, sans-serif'],
             },
-            colors: {
-                dark: '#1a1a1a',
-                mred: '#ff6188',
-                orange: '#fc9867',
-                myellow: '#ffd866',
-                green: '#a9dc76',
-                mblue: '#78dce8',
-                mpurple: '#AB9DF2',
-                white: '#ffffff',
-                cool: '#f0f0f0',
-            },
+            // colors: {
+            //     dark: '#1a1a1a',
+            //     mred: '#ff6188',
+            //     orange: '#fc9867',
+            //     myellow: '#ffd866',
+            //     green: '#a9dc76',
+            //     mblue: '#78dce8',
+            //     mpurple: '#AB9DF2',
+            //     white: '#ffffff',
+            //     cool: '#f0f0f0',
+            // },
             fontSize: {
                 'mx': '0.6rem',
             },
         },
     },
-    plugins: [],
+    plugins: [
+        require("@catppuccin/tailwindcss")({
+            prefix: "ctp",
+            // defaultFlavour: "macchiato",
+        }),
+    ],
 };

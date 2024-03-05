@@ -26,8 +26,8 @@ import '../styles/global.css'
         { title ?? "NoobScience" }  
     </title>
 </head>
-<body class="dark:bg-dark dark:text-neutral-300 bg-cool text-dark font-mono">
-    <main class="flex flex-col justify-center items-center">
+<body class="bg-ctp-base font-mono">
+    <main class="flex flex-col text-ctp-text justify-center items-center">
         <div class="md:w-3/5 w-full md:p-0 p-2">
 	        <Nav emoji={emoji} client:load />
             <div class="md:p-4 p-1 pt-2 md:my-5 border-dark dark:border-neutral-100 md:border-2">
@@ -41,7 +41,10 @@ import '../styles/global.css'
     const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
     if(prefersDarkScheme.matches){
         // add dark mode class to html
-        document.documentElement.classList.add('dark');
+        document.body.classList.add('ctp-macchiato');
+    }else{
+        // add light mode class to html
+        document.body.classList.add('ctp-latte');
     }
 </script>
 </html>
