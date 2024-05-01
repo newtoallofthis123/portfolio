@@ -2,19 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-::selection{
-    background: #f2f2f2;
-    color: #000;
+::selection {
+  background: #e0def4;
+  color: #232136;
 }
 
-body{
-    line-height: 1.7;
+body {
+  line-height: 1.7;
 }
 
 #inline-icon {
-    display: inline-block;
-    width: 1.2rem;
-    height: 1.2rem;
-    vertical-align: middle;
-    fill: currentColor;
+  display: inline-block;
+  width: 1.2rem;
+  height: 1.2rem;
+  vertical-align: middle;
+  fill: currentColor;
 }

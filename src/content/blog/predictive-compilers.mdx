@@ -1,0 +1,20 @@
+---
+title: Predictive Complilers-Scfi?
+date: 2024-04-21
+author: Ishan
+emoji: C 
+layout: "../../layouts/blog_post.astro"
+description: You missed a ; at line 22, let me add it for you! 
+draft: true
+tags: ["text-editor"]
+---
+
+We have all been there:
+If you know that I have an error at line 32 and you know that it is missing a `;`, why can't you add it for me!!!
+Now if you use a really good text editor or a lsp server, you would probably never really run into this: the error would
+be quite clear. However, imagine, what if, the compiler would actually fix the errors itself. I mean, to a certain extent at least.
+So, let's into the intricacies of this. Grab a drink, I know I have :)
+
+## How compilers work
+
+Well to even grasp what it means to predict or identify an error, we first must look at how complilation happens

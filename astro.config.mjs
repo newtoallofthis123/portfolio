@@ -42,4 +42,7 @@ export default defineConfig({
     },
     syntaxHighlight: "shiki",
   },
+  redirects: {
+    "/contact": "https://bento.me/noob",
+  },
 });
