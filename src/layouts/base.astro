@@ -2,9 +2,10 @@
 export interface Props{
     title?: string;
     emoji?: string;
+    color?: string,
 }
 
-const {title, emoji} = Astro.props;
+const {title, emoji, color} = Astro.props;
 
 import '@fontsource-variable/jetbrains-mono';
 import '@fontsource-variable/inter';
@@ -15,7 +16,7 @@ import '../styles/global.css'
 ---
 
 <!DOCTYPE html>
-<html lang="en" class="ctp-macchiato">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,16 +37,4 @@ import '../styles/global.css'
         </div>
     </main>
 </body>
-<script>
-    // dark mode
-    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
-    if(prefersDarkScheme.matches){
-        // add dark mode class to html
-        document.documentElement.classList.add('ctp-macchiato');
-    }else{
-        document.documentElement.classList.remove('ctp-macchiato');
-        // add light mode class to html
-        document.documentElement.classList.add('ctp-latte');
-    }
-</script>
 </html>

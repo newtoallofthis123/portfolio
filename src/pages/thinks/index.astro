@@ -1,0 +1,55 @@
+---
+import Base from '../../layouts/base.astro';
+import Char from '../../spans/char.astro';
+import Highlight from '../../spans/highlight.astro';
+import Link from '../../spans/link.astro';
+import { getCollection } from 'astro:content';
+
+let posts = await getCollection('thinks');
+posts = posts.sort(
+    (a: any, b: any) =>
+        new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<Base>
+    <div>
+        <h1 class="text-2xl font-bold pt-2 pb-4">
+            <Char char='||' /> get_thoughts();
+        </h1>
+        <div>
+            <p class="pb-2">
+                <Highlight>Thinking is fun</Highlight>
+            </p>
+            <p class="leading-7">
+                Well welcome to Noob Thinks. This is my place on the internet where I share thoughts on all kinds of weird stuff that I think about.
+            </p>
+            <p class="leading-7">
+                I like to keep this seperate and rather hidden from my site because most of this stuff has nothing to do with programming and computers, although it can sometime :)
+            </p>
+            <p class="leading-7">
+                I kinda want a place to put out all of thoughts at, so here it it.
+                Take everything you read here with a grain of salt. Here is some rn 🧂
+            </p>
+        </div>
+    </div>
+    <h2 class="py-4 text-xl font-bold">
+        <Char char="?" /> thoughts.sorted();
+    </h2>
+    <div class="md:w-2/3 md:p-0 pr-2">
+        {
+            posts.map((post) => (
+                <div class="pb-2 flex flex-row items-baseline justify-between gap-x-4">
+                    <h2>
+                        <Link href={`/thinks/${post.slug}`}>
+                            {post.data.title}
+                        </Link>
+                    </h2>
+                    <p class="text-neutral-200">
+                        {new Date(post.data.date).toLocaleDateString()}
+                    </p>
+                </div>
+            ))
+        }
+    </div>
+</Base>
