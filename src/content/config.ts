@@ -25,7 +25,20 @@ const thinkingContent = defineCollection({
     }),
 });
 
+const logContent = defineCollection({
+    type: 'content',
+    schema: () => z.object({
+        title: z.string(),
+        description: z.string().optional(),
+        date: z.date().default(new Date()),
+        commit: z.string().url().optional(),
+        workType: z.enum(["Study", "Code", "Mixed", "Meeting", "Other"]),
+    }),
+});
+
+
 export const collections = {
     blog: blogContent,
     thinks: thinkingContent,
+    log: logContent,
 };

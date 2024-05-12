@@ -1,0 +1,59 @@
+---
+import { siGithub } from 'simple-icons';
+import Base from '../../../layouts/base.astro';
+import Char from '../../../spans/char.astro';
+import Highlight from '../../../spans/highlight.astro';
+import Link from '../../../spans/link.astro';
+import { getCollection } from 'astro:content';
+
+let logs = await getCollection('log');
+logs = logs.sort(
+    (a: any, b: any) =>
+        new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<Base>
+    <div>
+        <h1 class="text-2xl font-bold pt-2 pb-4">
+            <Char char='=' /> swhkd.logs;
+        </h1>
+        <div>
+            <p class="pb-2">
+                <Highlight>Logs for the Summer</Highlight>
+            </p>
+            <p class="leading-7">
+                This is my log for all of the stuff that I do on SWHKD for the summer. It has categorical posts of my daily to weekly logs.
+            </p>
+            <p class="leading-7">
+                These logs are all written in a markdown format and rendered using the Astro.js framework natively.
+            </p>
+            <p class="leading-7">
+                Well the tone would be kinda light throught about these logs, with some code snippets here and there, almost acting as a knowledge base for
+                all of the stuff related to SWHKD.
+            </p>
+        </div>
+    </div>
+    <h2 class="py-4 text-xl font-bold">
+        <Char char="?" /> logs.sort();
+    </h2>
+    <div class="md:w-2/3 md:p-0 pr-2">
+        {
+            logs.map((log) => (
+                <div class="pb-2 flex flex-row items-center justify-between gap-x-4">
+                    <h2>
+                        <Link href={`/logs/${log.slug}`}>
+                            {log.data.title}
+                        </Link>
+                    </h2>
+                    <p class="text-neutral-200">
+                        {new Date(log.data.date).toLocaleDateString()}
+                        </p>
+                    <a class="text-rosePine-subtle" href={log.data.commit ? log.data.commit : "https://github.com/newtoallofthis123/swhkd/commits"}>
+                       <span id="inline-icon" set:html={siGithub.svg} /> Commit
+                    </a>
+                </div>
+            ))
+        }
+    </div>
+</Base>
