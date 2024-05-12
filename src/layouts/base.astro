@@ -23,6 +23,13 @@ import '../styles/global.css'
     
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
+    <link
+        rel="alternate"
+        type="application/rss+xml"
+        title="Ishan Writes"
+        href={`${Astro.site}rss.xml`}
+    />
+
     <title>
         { title ?? "NoobScience" }  
     </title>
@@ -31,9 +38,17 @@ import '../styles/global.css'
     <main class="flex flex-col dark:text-rosePine-text text-rosePineDawn-text justify-center items-center">
         <div class="md:w-3/5 w-full md:p-0 p-2">
 	        <Nav emoji={emoji} client:load />
-            <div class="md:p-4 p-1 pt-2 md:my-5 border-rosePineDawn-text dark:border-neutral-100 md:border-2">
+            <div class="md:p-4 p-1 pt-2 md:my-5 md:mb-1 border-rosePineDawn-text dark:border-neutral-100 md:border-2">
                 <slot />
             </div>
+            <footer class="text-rosePine-subtle flex flex-row items-center gap-x-4">
+                    <p>
+                        &copy; Ishan Joshi {new Date().getFullYear()}
+                    </p>
+                    <p class="pl-3">
+                        (using Rosé Pine and simpleicons)
+                    </p>
+            </footer>
         </div>
     </main>
 </body>
