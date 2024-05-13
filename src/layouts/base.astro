@@ -41,7 +41,7 @@ import '../styles/global.css'
             <div class="md:p-4 p-1 pt-2 md:my-5 md:mb-1 border-rosePineDawn-text dark:border-neutral-100 md:border-2">
                 <slot />
             </div>
-            <footer class="text-rosePine-subtle flex flex-row items-center gap-x-4">
+            <footer class="text-rosePine-subtle text-sm md:flex md:flex-row md:items-center md:gap-x-4">
                     <p>
                         &copy; Ishan Joshi {new Date().getFullYear()}
                     </p>
@@ -53,14 +53,11 @@ import '../styles/global.css'
     </main>
 </body>
 <script>
-    // dark mode
     const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
     if(prefersDarkScheme.matches){
-        // add dark mode class to html
         document.documentElement.classList.add('dark');
     }else{
         document.documentElement.classList.remove('dark');
-        // add light mode class to html
         document.documentElement.classList.add('light');
     }
 </script>
