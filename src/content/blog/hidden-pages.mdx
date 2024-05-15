@@ -1,0 +1,30 @@
+---
+title: Hidden pages on a site 
+date: 2024-05-15
+emoji: .
+layout: "../../layouts/blog_post.astro"
+---
+The art and joy of having and maintaining a website is one that is an ever declining trend.
+It was just a decade ago when people would have really cool sites that had really awesome and nostalgic animations and colors: it was a treat.
+To be fair, I was only 8 a decade ago, so the only websites my 8 year old brain liked were colorful.
+
+However, if you are among the rare few who actually like having their own little space on the web, first up: *Hi! I'm Ishan* and second, I have a really neat trick for you.
+**Have hidden pages on your website**
+
+Well the sentence is kinda self explanatory, but what I mean by hidden pages, are pages whose existence only you know about.
+If you have a `robots.txt` file on your site, be sure to unindex the pages, exclude them from your `sitemap.xml`: They should essentially be incognito.
+
+Now this has many advantages.
+1. You can have semi private stuff on there: Think family photos, a small journal or anything that you would like on the website, but not directly to anyone.
+Now even if you take all of these measures, if someone really wanted to index your site, they would. Hence why I called it semi private; but hey, base it off of your security and privacy model.
+2. Sharable Link: You have an instantly sharable link to stuff that you might need to share often: Think licenses, credits, your setup etc.
+3. Just cool: 
+If you are anything like me, you will definitely enjoy the feeling of having something like that exist.
+
+## How do I implement this?
+
+Well for my site atleast, there are alot of hidden pages. There are pages leading to some of my notes, personal links etc.
+
+So to implement this, all you really need to do is to not include a link of the page anywhere on your site, exclude it from the sitemap and robots file and you should be good to go. If you are storing stuff like photos, I recommend that you password protect the page or delay the render of the image to futher prevent indexing.
+
+I know this post is kinda weird, but hey, this is my blog 😄
