@@ -46,7 +46,9 @@ import '../styles/global.css'
                         &copy; Ishan Joshi {new Date().getFullYear()}
                     </p>
                     <p class="pl-3">
-                        (using Rosé Pine and simpleicons)
+                        (
+                        <span id="theme" class="cursor-pointer"></span>
+                        )
                     </p>
             </footer>
         </div>
@@ -54,11 +56,34 @@ import '../styles/global.css'
 </body>
 <script>
     const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+    let theme = "";
+    const themeElement = document.getElementById("theme");
+
     if(prefersDarkScheme.matches){
         document.documentElement.classList.add('dark');
+        if (themeElement) 
+          themeElement.innerText = "Rosé Pine Moon 🌑";
+        theme = "dark";
     }else{
         document.documentElement.classList.remove('dark');
         document.documentElement.classList.add('light');
+        if (themeElement)
+        themeElement.innerText = "Rosé Pine Dawn ☀️";
+        theme = "light";
     }
+    document.getElementById("theme")?.addEventListener("click", () => {
+        if(theme == "light"){
+            document.documentElement.classList.add('dark');
+            if (themeElement) 
+              themeElement.innerText = "Rosé Pine Moon 🌑";
+            theme = "dark";
+        } else{
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+            if (themeElement)
+            themeElement.innerText = "Rosé Pine Dawn ☀️";
+            theme = "light";
+        }
+    })
 </script>
 </html>
