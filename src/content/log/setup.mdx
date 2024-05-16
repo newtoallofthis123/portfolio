@@ -1,0 +1,28 @@
+---
+title: Setting up a env
+description: To develop it, you first need to use it :) 
+date: 2024-05-16
+workType: Study 
+layout: "../../layouts/blog_post.astro"
+---
+
+
+To setup, you first need to have rust installed on your system.
+Then, clone the repo: [waycate/swhkd](https://github.com/waycrate/swhkd) and run the commands below.
+This will generate two binaries in the target/release folder. One's the server daemon and other's
+the actual SWHKD client.
+
+```bash
+git clone https://github.com/waycrate/swhkd && cd swhkd
+cargo build --release && cd target/release
+./swhks && pkexec ./swhkd --config ~/.config/swhkd/swkhdrc
+```
+
+I originally planned on installing a nice wayland based window manager and 
+using SWHKD on it, however, I use Ubuntu 24.04 as my daily driver and most
+wayland based window managers seem to not work well on it.
+
+So, most of the testing will be done on my ubuntu-gnome, which I find kinda cool and
+funny.
+However, if you are interested in actually using swhkd to it's full extent, I would
+recommend you use a window manager like sway or hyprland if you use Arch btw.
