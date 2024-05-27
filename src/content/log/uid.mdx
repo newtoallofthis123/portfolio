@@ -1,0 +1,159 @@
+---
+title: Parsing UID 
+description: Trying to parse the UID of a loginable user from a process in root.
+date: 2024-05-27
+workType: Other
+layout: "../../layouts/blog_post.astro"
+---
+
+So since the goal is to be able to run the thread in the userspace, and even if we do end
+up with a dynamic privilege escalation model, at some point we would need our program to do the following:
+
+"Parse the UID of a loginable user from a process in root."
+
+Now this might sound easy at first, just use the `getuid()` syscall and you're done.
+However, that is not the case. The `getuid()` syscall returns the real user ID of the calling process.
+So when we actually use `sudo ./program`, the `getuid()` syscall will return the UID of the root ie 0.
+
+The way to actually get the UID hence became quite a bit more complicated.
+So with the help of my [references](#references), I was able to come up with the following approachs and the one I ended up using.
+
+### Approach 1: The SUDO_UID Environment Variable
+
+It turns out that when a program is run through sudo, the `SUDO_UID` environment variable is set to the UID of the user who ran the program.
+This might be very useful for our use case, as we can just read the environment variable and get the UID.
+
+```rust
+use std::env;
+
+fn get_uid() -> u32 {
+    let uid = env::var("SUDO_UID").unwrap();
+    uid.parse::<u32>().unwrap()
+}
+```
+
+As simple as that, we can now get the UID of the user who ran the program.
+However, there are quite a few problems with this approach.
+The first and the most obvious being that `sudo` is not there on every system.
+Moreover, the program need not be run through `sudo` always, so this approach is not very reliable.
+
+This drawback is enough to discard this approach, and hence I moved on to the next one.
+
+### Approach 2: The /proc/PID/status File
+
+The `/proc/PID/status` file contains a lot of information about the process with the given PID.
+One of the fields in this file is the `Uid` field, which contains the real, effective, and saved UIDs of the process.
+
+Specially the `Uid` field looks like this:
+
+```
+Uid:    1000    0    0    0
+```
+
+The above would be true for any program run through a sudo like process.
+Moreover, there is also the `/proc/PID/loginuid` file which contains the UID of the user who logged in.
+
+```rust
+use std::fs;
+
+fn get_uid(pid: u32) -> u32 {
+    let login_uid = fs::read_to_string("/proc/".to_string() + &pid.to_string() + "/loginuid").unwrap();
+    login_uid.trim().parse::<u32>().unwrap()
+}
+```
+
+This approach is much more reliable than the previous one and also depends on the program and the generallized
+linux system.
+However, the next one sounds equally promising.
+
+### Approach 3: The /etc/passwd File
+
+The `/etc/passwd` file contains a lot of information about the users on the system.
+One of the fields in this file is the UID of all of the users.
+
+From my research I was able to find that the UID of a user who is not root and is loginable is always greater than 1000.
+This is true for almost all of the linux systems, and hence we can use this information to get the UID of the user.
+
+```rust
+use std::fs;
+
+fn get_uid() -> u32 {
+    let passwd = fs::read_to_string("/etc/passwd").unwrap();
+    let lines: Vec<&str> = passwd.split("\n").collect();
+    for line in lines {
+        let parts: Vec<&str> = line.split(":").collect();
+        if parts[2].parse::<u32>().unwrap() > 1000 {
+            return parts[2].parse::<u32>().unwrap();
+        }
+    }
+    0
+}
+```
+
+This approach seems to be the most recommended one, as it is the most reliable and also the most general.
+
+## /proc vs /etc/passwd
+
+The `/proc/PID/status` file is a file that is created for every process that is run on the system.
+This means that this method is inherently dynamic.
+Now to be fair, if we parse it like this, we are almost guaranteed to get the UID of the user who ran the program.
+Plus since the `/proc` directory is used by the linux kernel itself, it is very unlikely that this system
+behaviour would be changed.
+
+On the other hand, the `/etc/passwd` file is a file that is created by the linux system itself and
+it is updated only whenever the login information of a user is changed.
+This means that this method is inherently static.
+The `/etc/passwd` file is hence also a good method.
+
+However, a small problem come in the UID itself.
+We are only assuming that the UID of a loginable user is always greater than 1000.
+This assumption is tue for *most* of the linux systems, but not all of them.
+However, the same is true if the tables turn.
+What if the user who is running the program is not a loginable user?
+
+Well all of these are the questions that I am still trying to answer.
+
+## Conclusion
+
+After looking at all of the approaches, I decided to go with the `/etc/passwd` file approach.
+This is because it seems to be the most generally used approach.
+Hence SWHKD can just read the /etc/passwd file and get the UID of the user who ran the program.
+
+However, I am going to stash the `/proc/PID/status` just in case the `/etc/passwd` file approach fails.
+
+One more interesting approach can be that if I do not find the UID of users who are greater than 1000 in the `/etc/passwd` file,
+I can fallback to the `/proc/PID/status` file approach.
+
+Hence, the program can look something like this:
+
+```rust
+fn parse_uid_from_line(line: &str) -> u32 {
+    line.split(':').nth(2).unwrap().parse::<u32>().unwrap()
+}
+
+fn parse_from_login() -> Result<u32, std::num::ParseIntError> {
+    let pid = std::process::id();
+    let status_path = format!("/proc/{}/loginuid", pid);
+    let status = fs::read_to_string(status_path).expect("Unable to read /proc/<pid>/loginuid");
+    status.trim().parse::<u32>()
+}
+
+fn get_uid() -> Result<u32, Box<dyn Error>> {
+    let pwd_content = fs::read_to_string("/etc/passwd").expect("Unable to read /etc/passwd");
+
+    let pwd_lines = pwd_content.lines().collect::<Vec<_>>();
+    match pwd_lines
+        .iter()
+        .find(|line| !line.contains("nologin") && parse_uid_from_line(line) >= 1000)
+    {
+        Some(line) => Ok(parse_uid_from_line(line)),
+        None => match parse_from_login() {
+            Ok(uid) => Ok(uid),
+            Err(e) => Err(Box::new(e)),
+        },
+    }
+}
+```
+
+This ensures that the program is able to get the UID of the user who ran the program in almost all of the cases.
+Hopefully this will work out.

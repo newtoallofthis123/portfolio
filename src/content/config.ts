@@ -33,6 +33,7 @@ const logContent = defineCollection({
         date: z.date().default(new Date()),
         commit: z.string().url().optional(),
         workType: z.enum(["Study", "Code", "Mixed", "Meeting", "Other"]),
+        reviewed: z.boolean().default(false),
     }),
 });
 
