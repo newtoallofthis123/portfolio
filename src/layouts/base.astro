@@ -3,9 +3,11 @@ export interface Props{
     title?: string;
     emoji?: string;
     color?: string,
+    description?: string;
+    img?: string;
 }
 
-const {title, emoji} = Astro.props;
+const {title, emoji, description, img = "/banner.png"} = Astro.props;
 
 import '@fontsource-variable/jetbrains-mono';
 import '@fontsource-variable/inter';
@@ -13,6 +15,8 @@ import 'bootstrap-icons/font/bootstrap-icons.min.css';
 import Nav from '../components/nav';
 
 import '../styles/global.css'
+import { ViewTransitions } from 'astro:transitions';
+const BASE_URL = "http://" + Astro.url.host
 ---
 
 <!DOCTYPE html>
@@ -23,11 +27,55 @@ import '../styles/global.css'
     
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="robots" content="index, follow, archive" />
+    <link rel="sitemap" href="/sitemap-index.xml">
+    <meta name="theme-color" content="#ffd845" />
+    <meta name="title" content="NoobScience" />
+    <meta
+        name="description"
+        content={description || "Hi! I am Ishan. I am a Student and Open Source Enthusiast. This is my personal portfolio website. I Like to Code Stuff. Check out my work!"}
+    />
+    <meta name="title" content={title || "NoobScience"} />
+    <meta
+        name="keywords"
+        content="noobscience, noob science, NoobScience, newtoallofthis123, technology, website"
+    />
+    <meta name="author" content="NoobScience" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={BASE_URL} />
+    <meta property="twitter:title" content="NoobScience" />
+    <meta
+        property="twitter:description"
+        content={description || "Student and Linux Guy. Working on Rust and Go."}
+    />
+    <meta
+        property="twitter:image"
+        content={ BASE_URL+ img}
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={BASE_URL} />
+    <meta property="og:title" content={title || "NoobScience"} />
+    <meta
+        property="og:description"
+        content={description || "Student and Open Source Enthusiast. I Like to Code Stuff. Check out my work!"}
+    />
+    <meta
+        property="og:image"
+        content={BASE_URL + img}
+    />
+    
+    <ViewTransitions fallback="none" />
+    
+    <script defer is:inline src="/_vercel/insights/script.js"></script>
     <link
         rel="alternate"
         type="application/rss+xml"
         title="Ishan Writes"
-        href={`${Astro.site}rss.xml`}
+        href={`${BASE_URL}/rss.xml`}
     />
 
     <title>
