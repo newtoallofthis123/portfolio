@@ -5,7 +5,7 @@ import MarkdownIt from 'markdown-it';
 const parser = new MarkdownIt();
 
 export async function GET(context) {
-    const logs = await getCollection("log");
+    const logs = await getCollection("gsoc_log");
     return rss({
         // `<title>` field in output xml
         title: 'Ishan\'s Gsoc Dev Log',

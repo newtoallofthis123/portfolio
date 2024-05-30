@@ -15,7 +15,7 @@ import 'bootstrap-icons/font/bootstrap-icons.min.css';
 import Nav from '../components/nav';
 
 import '../styles/global.css'
-import { ViewTransitions } from 'astro:transitions';
+import { siGithub, siRss } from 'simple-icons';
 const BASE_URL = "http://" + Astro.url.host
 ---
 
@@ -68,7 +68,7 @@ const BASE_URL = "http://" + Astro.url.host
         content={BASE_URL + img}
     />
     
-    <ViewTransitions fallback="none" />
+    <!-- <ViewTransitions fallback="none" /> -->
     
     <script defer is:inline src="/_vercel/insights/script.js"></script>
     <link
@@ -89,14 +89,22 @@ const BASE_URL = "http://" + Astro.url.host
             <div class="md:p-4 p-1 pt-2 md:my-5 md:mb-1 border-rosePineDawn-text dark:border-neutral-100 md:border-2">
                 <slot />
             </div>
-            <footer class="text-rosePine-subtle text-sm md:flex md:flex-row md:items-center md:gap-x-4">
+            <footer class="text-rosePine-subtle md:mb-10 mb-2 text-sm md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
                     <p>
                         &copy; Ishan Joshi {new Date().getFullYear()}
                     </p>
                     <p class="pl-3">
                         (
-                        <span id="theme" class="cursor-pointer"></span>
+                        <span id="theme" class="cursor-pointer">Theme Toggle</span>
                         )
+                    </p>
+                    <p class="pl-3 flex flex-row gap-x-4">
+                        <a href="/rss.xml">
+                            <span set:html={siRss.svg} id="inline-icon" />
+                        </a>
+                        <a href="https://github.com/newtoallofthis123/portfolio">
+                            <span set:html={siGithub.svg} id="inline-icon" />
+                        </a>
                     </p>
             </footer>
         </div>
@@ -107,7 +115,7 @@ const BASE_URL = "http://" + Astro.url.host
     let theme = "";
     const themeElement = document.getElementById("theme");
 
-    if(prefersDarkScheme.matches){
+    if(prefersDarkScheme.matches || localStorage.getItem('theme') == "dark"){
         document.documentElement.classList.add('dark');
         if (themeElement) 
           themeElement.innerText = "Rosé Pine Moon 🌑";
@@ -125,12 +133,14 @@ const BASE_URL = "http://" + Astro.url.host
             if (themeElement) 
               themeElement.innerText = "Rosé Pine Moon 🌑";
             theme = "dark";
+            localStorage.setItem('theme', 'dark');
         } else{
             document.documentElement.classList.remove('dark');
             document.documentElement.classList.add('light');
             if (themeElement)
             themeElement.innerText = "Rosé Pine Dawn ☀️";
             theme = "light";
+            localStorage.setItem('theme', 'light');
         }
     })
 </script>

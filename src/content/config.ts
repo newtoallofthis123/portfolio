@@ -25,7 +25,7 @@ const thinkingContent = defineCollection({
     }),
 });
 
-const logContent = defineCollection({
+const gsocLogContent = defineCollection({
     type: 'content',
     schema: () => z.object({
         title: z.string(),
@@ -38,8 +38,22 @@ const logContent = defineCollection({
 });
 
 
+const devLogContent = defineCollection({
+    type: 'content',
+    schema: () => z.object({
+        title: z.string(),
+        description: z.string().optional(),
+        date: z.date().default(new Date()),
+        commits: z.array(z.string().url()).optional(),
+        workType: z.enum(["Study", "Code", "Mixed", "Meeting", "Other"]),
+        authors: z.array(z.string()).optional(),
+        tags: z.array(z.string()).optional(),
+    }),
+});
+
 export const collections = {
     blog: blogContent,
     thinks: thinkingContent,
-    log: logContent,
+    gsoc_log: gsocLogContent,
+    devlog: devLogContent,
 };

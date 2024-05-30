@@ -1,11 +1,11 @@
 ---
 import {getEntry} from 'astro:content'
-import Base from '../../../layouts/base.astro';
+import Base from '../../layouts/base.astro';
 import { siGithub } from 'simple-icons';
 
 const {slug} = Astro.params;
 
-const post = await getEntry('gsoc_log', slug as string)
+const post = await getEntry('devlog', slug as string)
 
 // @ts-ignore
 const { Content } = await post?.render();

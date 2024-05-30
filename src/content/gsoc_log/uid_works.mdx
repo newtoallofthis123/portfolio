@@ -1,0 +1,56 @@
+---
+title: UID from /proc 
+description: Using the /proc/self/loginuid file 
+date: 2024-05-30
+workType: Other
+layout: "../../layouts/blog_post.astro"
+---
+
+After discussing the [previous approach](/gsoc/logs/uid),
+I realized that the `/proc/self/loginuid` would be a viable option to get the UID of the user who ran the program. 
+However, this was initially thought to be as `/proc/self/status` which contains the UIDs of the process, which looks
+like this:
+
+```
+Uid:    1000    0    0    0
+```
+
+This should work technically, however, when I run it from the rust program, it seems wrong.
+
+```rust
+fn get_uid() -> u32 {
+    let uid = fs::read_to_string("/proc/self/status").unwrap();
+    let uid = uid.lines().find(|line| line.starts_with("Uid:")).unwrap();
+    let uid = uid.split_whitespace().nth(1).unwrap();
+    uid.parse::<u32>().unwrap()
+}
+```
+
+It spits out `0` which is the UID of the root user and when I println! the file contents
+of the `/proc/self/status` file, it shows the wrong UIDs.
+
+```
+Uid:    0    0    0    0
+```
+
+This was quite confusing to say the least.
+However, after digging around a bit more and looking up at some forums, I found out that sudo
+actually works by forking into a process to the root user and then running the program.
+So the actual program that is reporting the UIDs is the sudo process and not the actual program.
+Hence, the UIDs are wrong.
+
+However, it turns out that when such a thing does happen, any type of escalation, be it from
+`sudo` or `doas`, the `/proc/self/loginuid` file is set to the UID of the user who ran the program.
+
+So I ended up using the following code to get the UID of the user who ran the program:
+
+```rust
+fn get_uid() -> u32 {
+    let uid = fs::read_to_string("/proc/self/loginuid").unwrap();
+    uid.parse::<u32>().unwrap()
+}
+```
+
+As simple as that, I was able to get the UID of the user who ran the program.
+
+I am testing it more, but it looks quite promising.
