@@ -1,5 +1,4 @@
 ---
-import { siGithub } from 'simple-icons';
 import Base from '../../layouts/base.astro';
 import Char from '../../spans/char.astro';
 import Highlight from '../../spans/highlight.astro';
@@ -54,9 +53,6 @@ logs = logs.sort(
                     <p class="text-rosePineDawn-subtle dark:text-rosePine-subtle">
                         {new Date(log.data.date).toLocaleDateString()}
                         </p>
-                    <a class="text-rosePineDawn-subtle dark:text-rosePine-subtle" href={log.data.commit ? log.data.commit : "https://github.com/newtoallofthis123/swhkd/commits"}>
-                       <span id="inline-icon" set:html={siGithub.svg} /> Commit
-                    </a>
                 </div>
             ))
         }
