@@ -1,0 +1,54 @@
+---
+title: Shared Memory 
+description: Some notes on my understanding of shared memory
+date: 2024-07-02
+workType: Other
+layout: "../../layouts/blog_post.astro"
+---
+
+Shared memory is a memory area that is shared between two or more processes.
+It is a way to communicate between processes without the need for IPC.
+This is achieved by using a shared allocated memory area that is accessible by all the processes.
+The shared memory area is created using the `shm_open` function.
+
+The `shm_open` is a system call that is used to create a shared memory area.
+A rust like implementation of this function can be made using the libc crate.:w
+
+```rust
+use libc;
+
+fn shm_open(name: &str, oflag: i32, mode: i32) -> i32 {
+    unsafe {
+        libc::shm_open(name.as_ptr(), oflag, mode)
+    }
+}
+```
+
+In the scope of SWHKD, a shared memory area can be used to communicate between the parent process running in
+sudo and the child process running in the user space.
+We can allocate a simple data storage structure like a `Vec<String>` or a ring buffer to the shared memory area,
+that can then be written to by the parent process and read by the child process.
+
+This should ideally be done using the `mmap` function.
+The `mmap` or the memory map function is a system call that is used to map a file into memory.
+
+However, before I start to actually implement this and write the code, I wanted to make sure that this indeed is
+the rust-y way of doing things.
+
+In the official rust documentation, I found a quote borrowed from the Go programming language documentation:
+
+> Do not communicate by sharing memory; instead, share memory by communicating.
+
+This quote stuck out quite a bit to me.
+What this essentially means is that the ideal approach to communicating memory is not sharing the memory itself,
+but rather sharing the data that is stored in the memory.
+This statement is essentially a corollary pointing to the use of channels.
+
+This quote does make a lot of sense.
+Would you rather pass a roti from the bowl or the whole bowl to a person?
+(Well ig you can do either, but think the bowl is heavy for something).
+
+So in this regard, I think the ITC way to doing things seems a lot more natural.
+However, I am a bit interested in shm so, let's assume that this is the way to go for a while and see how it goes.
+
+So, I will be doing a lot of reading on this topic and see how it goes.
