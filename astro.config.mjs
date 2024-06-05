@@ -20,7 +20,7 @@ export default defineConfig({
     markdown: {
         gfm: true,
         shikiConfig: {
-            theme: "tokyo-night",
+            theme: "catppuccin-mocha",
             langs: [
                 "javascript",
                 "html",
