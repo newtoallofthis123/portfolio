@@ -50,7 +50,7 @@ posts = posts.sort(
         <h2 class="pb-3 md:text-2xl text-xl font-bold"><Char /> show_blog_posts();</h2>
         <div>
             {
-                posts.slice(0, 3).map((post) => (
+                posts.slice(0, 5).map((post) => (
                     <div class="pb-2 flex flex-row items-baseline justify-between gap-x-4">
                         <h2 class="underline decoration-0.5 decoration-dotted">
                             <Link href={`/blog/${post.slug}`}>
