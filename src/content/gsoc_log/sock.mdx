@@ -1,0 +1,76 @@
+---
+title: Trying out sockets for Env 
+description: The server reads the env, sends it to the client, the client parses it and runs the command. 
+workType: Other
+date: 2024-06-11
+layout: "../../layouts/blog_post.astro"
+---
+
+For the sake of clarity before hand, this post should be considered only an experiment.
+However, it does seem to be quite viable, although I'm not sure if it's the best way to do it.
+
+So as I had mentioned in my previous log, it would be kinda cool and easy if we just use the already exisiting
+client server architecture and treat the server almost like a utility program that is always running in the background.
+
+The reason for so many issues and CVE's with the client server architecture was because the server was actually running 
+a shell commmand, ie the `sh -c` which essentially gave full access by text input to any possible adversary.
+Now this would not have been a problem if not for the IPC as well, which essentially created a bridge between the server and the client.
+A bridge that can be went under, over, or even through (bad analogy, but you get the point).
+
+So, I thought, since the env is now a problem both from a UX standpoint as well as the only issue with the ITC stuff going
+on in the main binary, why not just use a socket to send the env to the client, and then the client can parse it as it's own
+env and run the commands.
+This way, the server is just a utility program that is always running in the background, and the client is the one that
+actually responsible for the actual stuff.
+
+In fact, it can even be possible that the server be immediately terminated or made into a zombie process once the client
+has received the env.
+This would ensure improved security and also a better UX, as the client can now be run as a standalone program, and the server
+was just a startup utility.
+
+The code part of this would be quite simple as well:
+
+**Server**
+```rust
+let listener = UnixListener::bind(sock_file_path)?;
+for stream in listener.incoming() {
+    match stream {
+        Ok(stream) => {
+            log::info!("New client!");
+            handle_client(stream, &environment)?;
+        }
+        Err(e) => {
+            log::error!("Error accepting connection: {:?}", e);
+            break;
+        }
+    }
+}
+fn handle_client(mut socket: UnixStream, environment: &environ::Env)
+    -> std::io::Result<()> {
+    let env = environment.to_string();
+
+    socket.write_all(env.as_bytes())?;
+    socket.flush()?;
+
+    Ok(())
+}
+```
+
+**Client**
+```rust
+fn socket_read(socket_path: PathBuf) -> Result<String, Box<dyn Error>> {
+    let mut stream = UnixStream::connect(socket_path)?;
+    let mut response = String::new();
+    stream.read_to_string(&mut response)?;
+    Ok(response)
+}
+let env = socket_read(sock_file_path)?;
+let env = environ::Env::from_str(&env);
+```
+
+As simple as that.
+All of the heavy weight lifting regarding the parsing and setting of the env can 
+be the concern of the new-ly introduced environ module.
+
+Thus, this offers quite a good solution to the problem at hand, and also makes the
+current server be of some use instead of just phasing it out.
