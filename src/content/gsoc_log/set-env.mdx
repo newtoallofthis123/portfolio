@@ -1,0 +1,37 @@
+---
+title: Launching from Thread and Env
+description: Launching a process from a thread and handling environment variables
+workType: Other
+date: 2024-06-13
+layout: "../../layouts/blog_post.astro"
+---
+
+So according to my previous post, I've been trying to come up with a ITC based system for
+launching the program that the key daemon has to run. 
+The major problem that I've been facing is that the programs that were being launched from the
+de-escalated child process were not able to read the environment variables that were set in the
+user space.
+This is because when a child process is created, it inherits the environment variables of the parent,
+hence in this case, the child process inherits the environment variables of the root process.
+Hence, I got around this by passing the env to the child upon creation.
+
+```rust
+let cmd = Command::new("HOME=/home/username firefox").spawn().unwrap();
+````
+
+This way, the child process is able to read the environment variables that are passed to it.
+
+so, this week I was trying to address the standardization of the environment variables that are
+passed to the child process.
+Turns out that this happens automatically when the command is run from the shell.
+I initially thought of changing the `/proc/self/environ` file to the environment variables that are
+passed to the child process. However, it is a virtual file and cannot be changed.
+
+More, I found quite a major bug in this approach, where programs that are launched from the thread, using the env syntax above, 
+they seem to fail to run sudo, essentially losing their user identity. 
+I am sure I can get around this by changing the right env settings as I pass in, but I am still researching it. 
+It does seem to be a priority issue
+
+To solve this, I am working on generating a diff tree of the `/proc/self` between a normal process and
+a process that is run from our child thread.
+Also, I am working on making sure that there are no leaks in our IPC approach to get the env.
