@@ -1,0 +1,44 @@
+---
+title: Group Problem
+description: The bug that is causing the child process to not have the correct permissions
+date: 2024-06-18
+workType: Other
+layout: "../../layouts/blog_post.astro"
+---
+
+So as I mentioned in my [last post](/gsoc/logs/set-env) about setting up the environment, I had to
+rethink the way I was doing the env, using an IPC approach to only get the `env` and essentially
+emulate it in the child process that was being launched from the thread.
+However, this was still causing a very major bug, that was discovered when I was trying to run
+the `sudo apt update` command on a terminal that was spawned from the thread and I got the error:
+
+```bash
+sudo: cannot read the sudoes file
+``` 
+
+This was a very major issue, which meant that appropriate permissions were not being set for the
+child process. So, with the recommendation of my mentor, I decided to make a small diff
+of a process that would be launched normally (from dmenu) and one that would be launched from the
+thread. This was to see if there was any difference in the proc tree and the permissions that were
+being set. 
+Turns out, there was a *major* difference: The `groups` that were being set for the child process
+were not at all the same and rather with sufficient permissions then then one that was being launched
+normally. 
+These were checked in the `/proc/<pid>/status` file, where the `Groups` field was being checked.
+This was done in rust, but can be emulated using `sh` as well:
+```bash
+cat /proc/23190/status | grep Groups
+```
+
+==Output==
+```bash
+# Normal 
+Groups:	4 6 24 27 30 46 100 114 129 993 995 1000 64055
+# Our Thread
+Groups:	1000
+```
+
+So this boils down our problems to the `groups` that were being set for the child process.
+I think this can be solved using the `setgroups` syscall, which is used to set the groups for the
+child process. This is what I will be working on next, and hopefully, this will solve the issue
+that we are facing.

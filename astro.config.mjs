@@ -21,7 +21,7 @@ export default defineConfig({
     markdown: {
         gfm: true,
         shikiConfig: {
-            theme: 'catppuccin-mocha',
+            theme: 'rose-pine',
             langs: [
                 'javascript',
                 'html',
