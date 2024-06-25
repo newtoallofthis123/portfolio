@@ -1,0 +1,10 @@
+---
+import Base from '../layouts/base.astro';
+import ContactForm from '../components/contact';
+import Char from '../spans/char.astro';
+---
+
+<Base title="Contact Me!">
+    <h1 class="text-2xl font-bold pb-4 pt-2"><Char char='@' /> Contact Me</h1>
+    <ContactForm client:load />
+</Base>

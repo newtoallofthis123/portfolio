@@ -1,147 +1,168 @@
 ---
-export interface Props{
+export interface Props {
     title?: string;
     emoji?: string;
-    color?: string,
+    color?: string;
     description?: string;
     img?: string;
 }
 
-const {title, emoji, description, img = "/banner.png"} = Astro.props;
+const { title, emoji, description, img = '/banner.png' } = Astro.props;
 
 import '@fontsource-variable/jetbrains-mono';
 import '@fontsource-variable/inter';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
 import Nav from '../components/nav';
 
-import '../styles/global.css'
+import '../styles/global.css';
 import { siGithub, siRss } from 'simple-icons';
-const BASE_URL = "http://" + Astro.url.host
+import { ViewTransitions } from 'astro:transitions';
+const BASE_URL = 'http://' + Astro.url.host;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="robots" content="index, follow, archive" />
-    <link rel="sitemap" href="/sitemap-index.xml">
-    <meta name="theme-color" content="#ffd845" />
-    <meta name="title" content="NoobScience" />
-    <meta
-        name="description"
-        content={description || "Hi! I am Ishan. I am a Student and Open Source Enthusiast. This is my personal portfolio website. I Like to Code Stuff. Check out my work!"}
-    />
-    <meta name="title" content={title || "NoobScience"} />
-    <meta
-        name="keywords"
-        content="noobscience, noob science, NoobScience, newtoallofthis123, technology, website"
-    />
-    <meta name="author" content="NoobScience" />
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={BASE_URL} />
-    <meta property="twitter:title" content="NoobScience" />
-    <meta
-        property="twitter:description"
-        content={description || "Student and Linux Guy. Working on Rust and Go."}
-    />
-    <meta
-        property="twitter:image"
-        content={ BASE_URL+ img}
-    />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={BASE_URL} />
-    <meta property="og:title" content={title || "NoobScience"} />
-    <meta
-        property="og:description"
-        content={description || "Student and Open Source Enthusiast. I Like to Code Stuff. Check out my work!"}
-    />
-    <meta
-        property="og:image"
-        content={BASE_URL + img}
-    />
-    
-    <!-- <ViewTransitions fallback="none" /> -->
-    
-    <script defer is:inline src="/_vercel/insights/script.js"></script>
-    <link
-        rel="alternate"
-        type="application/rss+xml"
-        title="Ishan Writes"
-        href={`${BASE_URL}/rss.xml`}
-    />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 
-    <title>
-        { title ?? "NoobScience" }  
-    </title>
-</head>
-<body class="dark:bg-rosePine-base bg-rosePineDawn-base font-mono">
-    <main class="flex flex-col dark:text-rosePine-text text-rosePineDawn-text justify-center items-center">
-        <div class="md:w-3/5 w-full md:p-0 p-2">
-	        <Nav emoji={emoji} client:load />
-            <div class="md:p-4 p-1 pt-2 md:my-5 md:mb-1 border-rosePineDawn-text dark:border-neutral-100 md:border-2">
-                <slot />
-            </div>
-            <footer class="text-rosePine-subtle md:mb-10 mb-2 text-sm md:flex md:flex-row md:items-center md:justify-between md:gap-x-4">
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="robots" content="index, follow, archive" />
+        <link rel="sitemap" href="/sitemap-index.xml" />
+        <meta name="theme-color" content="#ffd845" />
+        <meta name="title" content="NoobScience" />
+        <meta
+            name="description"
+            content={description ||
+                'Hi! I am Ishan. I am a Student and Open Source Enthusiast. This is my personal portfolio website. I Like to Code Stuff. Check out my work!'}
+        />
+        <meta name="title" content={title || 'NoobScience'} />
+        <meta
+            name="keywords"
+            content="noobscience, noob science, NoobScience, newtoallofthis123, technology, website"
+        />
+        <meta name="author" content="NoobScience" />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={BASE_URL} />
+        <meta property="twitter:title" content="NoobScience" />
+        <meta
+            property="twitter:description"
+            content={description ||
+                'Student and Linux Guy. Working on Rust and Go.'}
+        />
+        <meta property="twitter:image" content={BASE_URL + img} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={BASE_URL} />
+        <meta property="og:title" content={title || 'NoobScience'} />
+        <meta
+            property="og:description"
+            content={description ||
+                'Student and Open Source Enthusiast. I Like to Code Stuff. Check out my work!'}
+        />
+        <meta property="og:image" content={BASE_URL + img} />
+
+        <ViewTransitions fallback="none" />
+
+        <script defer is:inline src="/_vercel/insights/script.js"></script>
+        <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="Ishan Writes"
+            href={`${BASE_URL}/rss.xml`}
+        />
+
+        <title>
+            {title ?? 'NoobScience'}
+        </title>
+    </head>
+    <body class="dark:bg-rosePine-base bg-rosePineDawn-base font-mono">
+        <main
+            class="flex flex-col dark:text-rosePine-text text-rosePineDawn-text justify-center items-center"
+        >
+            <div class="md:w-3/5 w-full md:p-0 p-2">
+                <Nav emoji={emoji} client:load />
+                <div
+                    class="md:p-4 p-1 pt-2 md:my-5 md:mb-1 border-rosePineDawn-text dark:border-neutral-100 md:border-2"
+                >
+                    <slot />
+                </div>
+                <footer
+                    transition:persist
+                    class="text-rosePine-subtle md:mb-10 mb-2 text-sm md:flex md:flex-row md:items-center md:justify-between md:gap-x-4"
+                >
                     <p>
                         &copy; Ishan Joshi {new Date().getFullYear()}
                     </p>
                     <p class="pl-3">
                         (
-                        <span id="theme" class="cursor-pointer">Theme Toggle</span>
+                        <span id="theme" class="cursor-pointer"
+                            >Theme Toggle</span
+                        >
                         )
                     </p>
                     <p class="pl-3 flex flex-row gap-x-4">
                         <a href="/rss.xml">
                             <span set:html={siRss.svg} id="inline-icon" />
                         </a>
-                        <a href="https://github.com/newtoallofthis123/portfolio">
+                        <a
+                            href="https://github.com/newtoallofthis123/portfolio"
+                        >
                             <span set:html={siGithub.svg} id="inline-icon" />
                         </a>
                     </p>
-            </footer>
-        </div>
-    </main>
-</body>
-<script>
-    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
-    let theme = "";
-    const themeElement = document.getElementById("theme");
+                </footer>
+            </div>
+        </main>
+        <script is:inline>
+            const prefersDarkScheme = window.matchMedia(
+                '(prefers-color-scheme: dark)'
+            );
+            let theme = '';
+            const themeElement = document.getElementById('theme');
 
-    if(prefersDarkScheme.matches || localStorage.getItem('theme') == "dark"){
-        document.documentElement.classList.add('dark');
-        if (themeElement) 
-          themeElement.innerText = "Rosé Pine Moon 🌑";
-        theme = "dark";
-    }else{
-        document.documentElement.classList.remove('dark');
-        document.documentElement.classList.add('light');
-        if (themeElement)
-        themeElement.innerText = "Rosé Pine Dawn ☀️";
-        theme = "light";
-    }
-    document.getElementById("theme")?.addEventListener("click", () => {
-        if(theme == "light"){
-            document.documentElement.classList.add('dark');
-            if (themeElement) 
-              themeElement.innerText = "Rosé Pine Moon 🌑";
-            theme = "dark";
-            localStorage.setItem('theme', 'dark');
-        } else{
-            document.documentElement.classList.remove('dark');
-            document.documentElement.classList.add('light');
-            if (themeElement)
-            themeElement.innerText = "Rosé Pine Dawn ☀️";
-            theme = "light";
-            localStorage.setItem('theme', 'light');
-        }
-    })
-</script>
+            const updateTheme = () => {
+                if (
+                    prefersDarkScheme.matches ||
+                    localStorage.getItem('theme') == 'dark'
+                ) {
+                    document.documentElement.classList.add('dark');
+                    if (themeElement)
+                        themeElement.innerText = 'Rosé Pine Moon 🌑';
+                    theme = 'dark';
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
+                    if (themeElement)
+                        themeElement.innerText = 'Rosé Pine Dawn ☀️';
+                    theme = 'light';
+                }
+            };
+            updateTheme();
+            const handleTheme = () => {
+                if (theme == 'light') {
+                    document.documentElement.classList.add('dark');
+                    if (themeElement)
+                        themeElement.innerText = 'Rosé Pine Moon 🌑';
+                    theme = 'dark';
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
+                    if (themeElement)
+                        themeElement.innerText = 'Rosé Pine Dawn ☀️';
+                    theme = 'light';
+                    localStorage.setItem('theme', 'light');
+                }
+            };
+            document
+                .getElementById('theme')
+                ?.addEventListener('click', handleTheme);
+            document.addEventListener('astro:after-swap', updateTheme);
+        </script>
+    </body>
 </html>
