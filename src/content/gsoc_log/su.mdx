@@ -9,4 +9,71 @@ layout: "../../layouts/blog_post.astro"
 It's been a while since I've written a log about my work, mostly because I've gone back to the drawing
 board for a bit. The reason I will be detailing below.
 However, I think I have come up with a solution that seems to be working well so far.
-Almost to an *MVP level*, I would say.
+Almost to an *MVP level*.
+
+The way it works is by delegating the task of setting the correct permissions to `su` and 
+then calling the child process with the correct permissions.
+
+*Note*: `su` is a POSIX utility that allows you to run a command with a substitute user and group ID.
+It is included in the GNU coreutils package and is available on all Linux systems.
+
+The way I am using it is by calling `su` with the username of the user, that can be passed using the
+flag `-c`. This will run the command as the user specified.
+The username can be parsed using the `uid` that we have already [parsed](/gsoc/logs/uid_works).
+This Uid can be simply obtained from the `passwd` file.
+
+So now, when we have to launch the child process, we can either directly add this to the 
+`send_command` function in the SWHKD codebase or we can also spawn a green thread that will
+work off of a channel to get the command to run and then run it with su.
+
+Direct call:
+```rust
+let mut child = Command::new("su");
+child.arg(uname);
+child.arg("-c");
+child.arg(commands_to_send);
+
+if let Err(e) = child.spawn() {
+    log::error!("Child error: {}", e);
+}
+```
+
+Green thread:
+```rust
+let (tx, rx) = mpsc::channel();
+let uname = get_username(uid);
+let commands_to_send = Vec::from(commands);
+
+for command in commands_to_send {
+    tx.send(command).unwrap();
+}
+
+tokio::spawn(move || {
+    let commands_to_send = rx.recv().unwrap();
+    let mut child = Command::new("su");
+    child.arg(uname);
+    child.arg("-c");
+    child.arg(commands_to_send);
+
+    if let Err(e) = child.spawn() {
+        log::error!("Child error: {}", e);
+    }
+});
+```
+
+This is the basic idea of how I am planning to implement this. I will be working on this
+in the coming days and will update the log with the progress.
+
+However, a very basic implementation looks as follows:
+
+<video src="/vids/su-implementation.mp4" controls muted />
+
+As you can see, there are still some issues that need to be resolved.
+The initial login with sudo would not be required when called
+from a window manager, but it is required when called from the terminal.
+
+Moreover, the env variables are not being passed correctly, which in some cases is causing the 
+GTK applications to not be able to read their cache.
+This too can be resolved by passing the env variables correctly. 
+
+I will be working on these issues in the coming days and will update the log with the progress.
