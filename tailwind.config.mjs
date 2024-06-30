@@ -14,7 +14,7 @@ export default {
             colors: {
                 rosePine: {
                     // base: "#191724",
-                    base: '#1a1a1a',
+                    base: '#141414',
                     surface: '#1f1d2e',
                     overlay: '#26233a',
                     muted: '#6e6a86',
