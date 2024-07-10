@@ -1,56 +1,162 @@
 ---
-import Base from '../../layouts/base.astro';
-import Char from '../../spans/char.astro';
-import Highlight from '../../spans/highlight.astro';
-import Link from '../../spans/link.astro';
+import BlogBase from '../../layouts/blog_base.astro';
 import { getCollection } from 'astro:content';
 
 let posts = await getCollection('blog');
 posts = posts.filter((post) => !post.data.draft);
+// posts = posts.filter((post: any) => {
+//     return !post.frontmatter.draft && !post.frontmatter.quick;
+// });
 posts = posts.sort(
     (a: any, b: any) =>
         new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
+const posts_length = posts.length;
+posts = posts.slice(0, 10);
 ---
 
-<Base title='NoobLog'>
-    <div>
-        <h1 class="text-2xl font-bold pt-2 pb-4">
-            <Char /> my_blog();
-        </h1>
-        <div>
-            <p class="pb-2">
-                Welcome to <Highlight>Ishan Writes</Highlight>.
-            </p>
-            <p class="leading-7">
-                This is my place on the <i class="bi bi-globe"></i> internet where I write about things that
-                I find interesting. Sometimes funny, sometimes serious, but
-                always interesting (At least I hope so). So, grab a cup of <i class="bi bi-cup"></i> coffee
-                and enjoy the read.
-            </p>
-            <p class="text-rosePineDawn-subtle dark:text-rosePine-subtle mt-2">
-                PS: You can use the power of <Link href="/rss.xml">RSS</Link>
-                here.
-            </p>
+<BlogBase title="Ishan Writes | Tech, Opinions and Culture">
+    <div class="flex flex-col md:flex-row">
+        <div class="w-full md:w-4/6">
+            <div class="flex flex-col p-4 justify-center items-center">
+                <div class="w-full md:w-4/5">
+                    <h1 class="text-2xl md:text-4xl py-4 md:py-8 font-bold">
+                        I have a <span>lot</span> of thoughts
+                    </h1>
+                    <p class="text-xl">Tech | Opinions | Culture | Journal</p>
+                    <div class="py-8">
+                        <p>
+                            Hi! I am a Ishan and I am a 19 year old self taught
+                            developer from India. You can know more about me
+                            from my <a href="/about">About</a> section. Anyways,
+                            putting all of that aside, welcome to my blog, Ishan
+                            Writes. Well, I know the name is quite simple, but I
+                            love simplicity. The site design itself is inspired by
+                            <a href="https://www.nytimes.com">NYTimes</a>, one
+                            of the best designs I have ever seen. I mean, it is
+                            a fusion. I always wanted a blog, one I made on my
+                            own, so here it is. The blog itself is written in <a
+                                href="https://astro.build">Astro</a
+                            > and uses <a href="https://tailwindcss.com"
+                                >TailwindCSS</a
+                            > for styling.
+                        </p>
+                        <p>
+                            This blog is a subsidiary of my main site and is
+                            hosted on <a href="https://vercel.com">Vercel</a>.
+                            You can expect the writing style to be simple and
+                            casual. I am not a professional writer, so I will
+                            write as I speak. You can also expect a lot terms
+                            and phrases from the programming world and the GenZ
+                            world. I will try to keep the posts as short as
+                            possible, but I will not compromise on the content.
+                            Blogging has always been a favourite of mine.
+                        </p>
+                        <p>
+                            This blog will mostly have technical posts, but I
+                            will also write about my life and my experiences.
+                            So, stay tuned for that. I will also try to post as
+                            frequently as possible, but I am a student, so I
+                            cannot promise anything :)
+                        </p>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold py-4">
+                            Ideologies and Opinions
+                        </h2>
+                        <p>
+                            Well, I thought I should make this clear, just in
+                            case. All the content written in this blog is my own
+                            opinion and does not reflect the opinion of any
+                            other person or organization. Some of these might
+                            not be based in cold hard facts, but they are my
+                            opinions and I am sorry if I hurt your feelings. In
+                            the end, I am just a 19 year old kid, so please
+                            don't take my opinions too seriously. I started
+                            programming quite recently, so, if you think I did
+                            something wrong, please let me know. One more thing,
+                            I am not a native English speaker, so please excuse
+                            any grammatical errors you might find. Moreover, I
+                            might use some terms and phrases from the
+                            programming world and the GenZ world, so please
+                            excuse that as well.
+                        </p>
+                    </div>
+                    <p>
+                        There are {posts_length} posts so far! Check them all out.
+                    </p>
+                    <div>
+                        <h2 class="text-2xl font-bold py-4">
+                            AI and Citations
+                        </h2>
+                        <p>
+                            This site uses a little help from LLM's to generate
+                            the intoduction and TLDR. Moreover, most of the
+                            images are AI generated as well. However, most of
+                            the content is written by me. One more thing, I am
+                            not a native English speaker, so please excuse any
+                            grammatical errors you might find. All the content
+                            is licensed under the <a
+                                href="https://mit-license.org">MIT License</a
+                            >. You are free to use the content as you wish, but
+                            please cite the source or link back to this site.
+                            This is not a legal requirement, but it would be
+                            nice if you did. Moreover, this site should be
+                            considered as a subsidiary of my main site. Here are
+                            the <a href="/i/tos">Terms of Use</a>.
+                        </p>
+                        <div
+                            class="py-4 flex flex-row flex-wrap items-center gap-x-5"
+                        >
+                            <img src="/assets/not_ai.svg" alt="Not an AI" />
+                            <img src="/assets/mit.svg" alt="MIT License" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-full md:w-2/6 p-4 my-4 cursor-pointer border-gray-200">
+            <div>
+                {
+                    posts.map((post: any) => {
+                        return (
+                            <div
+                                onclick={
+                                    "location.href = /blog/'" + post.slug + "'"
+                                }
+                                class="border-gray-200 border-b-2"
+                            >
+                                <div class="py-4">
+                                    <a
+                                        href={
+                                            '/blog/cats/' + post.data.category
+                                        }
+                                        class="text-sm px-1"
+                                    >
+                                        {post.data.category}
+                                    </a>
+                                </div>
+                                <h2 class="text-2xl font-bold">
+                                    <a
+                                        href={`/blog/${post.slug}`}
+                                        class="no-underline"
+                                    >
+                                        {post.data.emoji || '😎'}{' '}
+                                        {post.data.title}{' '}
+                                    </a>
+                                </h2>
+                                <p class="text-sm p-2">
+                                    By {post.data.author} on{' '}
+                                    {new Date(
+                                        post.data.date
+                                    ).toLocaleDateString()}{' '}
+                                    | Avg {post.data.minutesRead}
+                                </p>
+                            </div>
+                        );
+                    })
+                }
+            </div>
         </div>
     </div>
-    <h2 class="py-4 text-xl font-bold">
-        <Char char="~" /> posts.sorted();
-    </h2>
-    <div class="md:w-2/3 md:p-0 pr-2">
-        {
-            posts.map((post) => (
-                <div class="pb-2 flex flex-row items-baseline justify-between gap-x-4">
-                    <h2>
-                        <Link href={`/blog/${post.slug}`}>
-                            {post.data.title}
-                        </Link>
-                    </h2>
-                    <p class="text-rosePineDawn-subtle dark:text-rosePine-subtle">
-                        {new Date(post.data.date).toLocaleDateString()}
-                    </p>
-                </div>
-            ))
-        }
-    </div>
-</Base>
+</BlogBase>

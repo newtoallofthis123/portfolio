@@ -6,15 +6,18 @@ const blogContent = defineCollection({
         z.object({
             title: z.string(),
             author: z.string().default('Ishan Joshi'),
-            date: z.date(),
+            date: z.date().default(new Date()),
             description: z.string().default(''),
+            category: z.string().default('blog'),
             emoji: z.string().optional(),
             color: z.string().default('pine'),
             tags: z.array(z.string()).optional(),
             draft: z.boolean().default(false),
+            theme: z.string().default('default'),
             img: image()
                 .refine((img) => img)
                 .optional(),
+            quick: z.boolean().default(false),
         }),
 });
 

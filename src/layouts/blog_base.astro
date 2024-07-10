@@ -6,12 +6,15 @@ export interface Props {
     description?: string;
     img?: string;
     nav?: boolean;
+    bg?: string;
 }
 
 const {
     title,
     emoji,
     description,
+    color = 'black',
+    bg = 'white',
     img = '/banner.png',
     nav = false,
 } = Astro.props;
@@ -24,8 +27,7 @@ import '@fontsource/atkinson-hyperlegible/400.css';
 import '@fontsource/atkinson-hyperlegible/700.css';
 import '@fontsource/archivo-black';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
-import Nav from '../components/nav';
-import NavNormal from '../components/nav_normal';
+import BlogNav from '../components/blog_nav';
 
 import '../styles/global.css';
 import { siGithub, siRss } from 'simple-icons';
@@ -96,8 +98,7 @@ const BASE_URL = 'http://' + Astro.url.host;
     <body>
         <main class="flex flex-col justify-center items-center">
             <div class="md:p-0 p-2">
-                {nav && <Nav emoji={emoji} client:load />}
-                {!nav && <NavNormal client:load />}
+                <BlogNav color={color} bg={bg} />
                 <div class="">
                     <slot />
                 </div>
@@ -170,5 +171,45 @@ const BASE_URL = 'http://' + Astro.url.host;
                 ?.addEventListener('click', handleTheme);
             document.addEventListener('astro:after-swap', updateTheme);
         </script>
+        <style is:inline>
+            /* nav {
+                background-color: #fbfbfb;
+            }
+            body {
+                background-color: #fbfbfb;
+            } */
+            ::selection {
+                background-color: #aef444;
+                color: #000;
+            }
+            main {
+                font-family: 'Inter', --apple-system, BlinkMacSystemFont,
+                    'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+                    'Helvetica Neue', sans-serif;
+            }
+            h1 {
+                font-family: 'Archivo Black', --apple-system, BlinkMacSystemFont,
+                    'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+                    'Helvetica Neue', sans-serif;
+            }
+            p {
+                font-size: 1.2rem;
+                line-height: 2.5rem;
+            }
+            a {
+                text-decoration: underline;
+            }
+            @media (max-width: 768px) {
+                h1,
+                h2 {
+                    font-size: 1.5rem;
+                    line-height: 1.6;
+                }
+                p {
+                    font-size: 1rem;
+                    line-height: 2.2rem;
+                }
+            }
+        </style>
     </body>
 </html>

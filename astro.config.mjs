@@ -3,6 +3,7 @@ import vercel from '@astrojs/vercel/serverless';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
+import markdownConfig from './markdown.config';
 
 import mdx from '@astrojs/mdx';
 
@@ -14,7 +15,15 @@ export default defineConfig({
     adapter: vercel({
         webAnalytics: { enabled: true },
     }),
-    integrations: [react(), tailwind(), mdx(), sitemap()],
+    integrations: [
+        react(),
+        tailwind(),
+        mdx({
+            ...markdownConfig,
+            // extendPlugins: false,
+        }),
+        sitemap(),
+    ],
     image: {
         service: squooshImageService(),
     },
@@ -48,6 +57,6 @@ export default defineConfig({
         syntaxHighlight: 'shiki',
     },
     // redirects: {
-    //     "/contact": "https://bento.me/noob",
+    //     '/contact': 'https://bento.me/noob',
     // },
 });

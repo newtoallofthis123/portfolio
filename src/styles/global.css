@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 ::selection {
-  background: #e0def4;
-  color: #232136;
+  background: #2815f7;
+  color: #f1f1f3;
 }
 
 body {
@@ -17,4 +17,93 @@ body {
   height: 1.2rem;
   vertical-align: middle;
   fill: currentColor;
+}
+
+.page-div {
+  padding: 2rem;
+  margin: 2rem;
+  border: 3px solid currentColor;
+  border-radius: 0.4em;
+  box-shadow: 0.3em 0.4em;
+}
+
+.page-div img {
+  width: 80%;
+  margin: 0 auto;
+  border: 3px solid currentColor;
+  border-radius: 24px;
+}
+
+@media screen and (max-width: 1024px) {
+  .page-div {
+    padding: 1rem;
+    margin: 1rem;
+  }
+}
+
+.btn {
+  color: inherit;
+  padding: 0.6em 1.3em;
+  margin: 0.5em;
+  cursor: pointer;
+  font-weight: 700;
+  border: 3px solid black;
+  border-radius: 0.4em;
+  box-shadow: 0.1em 0.1em;
+}
+
+.btn:hover {
+  transform: translate(-0.05em, -0.05em);
+  box-shadow: 0.15em 0.15em;
+}
+
+.btn:active {
+  transform: translate(0.05em, 0.05em);
+  box-shadow: 0.05em 0.05em;
+}
+
+.btn a {
+  color: black;
+  text-decoration: none;
+}
+
+.search_container {
+  position: relative;
+  --size-button: 32px;
+}
+
+.input {
+  padding-left: var(--size-button);
+  height: var(--size-button);
+  font-size: 15px;
+  border: none;
+  color: #000;
+  outline: none;
+  width: var(--size-button);
+  transition: all ease 0.3s;
+  background-color: #0000;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.input:focus,
+.input:not(:invalid) {
+  width: 200px;
+  cursor: text;
+}
+
+.input:focus+.icon,
+.input:not(:invalid)+.icon {
+  pointer-events: all;
+  cursor: pointer;
+}
+
+.search_container .icon {
+  position: absolute;
+  width: 2.1rem;
+  height: var(--size-button);
+  top: 0;
+  left: 0;
+  padding: 8px;
+  pointer-events: none;
 }

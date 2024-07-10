@@ -1,11 +1,6 @@
 ---
-import { siGo, siLinux, siRust } from 'simple-icons';
 import Base from '../layouts/base.astro';
-import Bold from '../spans/bold.astro';
-import HightLight from '../spans/highlight.astro';
-import Link from '../spans/link.astro';
 import { getCollection } from 'astro:content';
-import Char from '../spans/char.astro';
 
 let posts = await getCollection('blog');
 posts = posts.filter((post) => !post.data.draft);
@@ -13,56 +8,181 @@ posts = posts.sort(
     (a: any, b: any) =>
         new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
+posts = posts.slice(0, 10);
+let latest = posts[0];
 ---
 
-<Base>
-    <h1 class="text-xl">
-        Hi Internet Friend! I am <Bold>The Noob!</Bold>
-    </h1>
-    <div id="banner" class="my-2 text-dark dark:text-white">
-        <pre class="text-mx md:text-lg">
-	<span class="dark:text-rosePine-foam text-rosePineDawn-foam">____</span>     <span class="dark:text-rosePine-foam text-rosePineDawn-foam">__                       __           __    _</span> 
-   <span class="dark:text-rosePine-gold text-rosePineDawn-gold">/  _/____/ /_  ____</span><span class="dark:text-rosePine-love text-rosePineDawn-love"> _____         / /___  _____/ /_  (_)</span>
-   / //<span class="dark:text-rosePine-iris text-rosePineDawn-iris"> ___/ __ \/ __</span> `/ __ <span class="dark:text-rosePine-gold text-rosePineDawn-gold">\   __  / / __ \/ ___/ __ \/ / </span>
- _/ /(__  <span class="text-rosePine-pine">) / / / /_/ / / / /  / /_/ </span><span class="dark:text-rosePine-rose text-rosePineDawn-rose">/ /_/ (__  ) / / / /</span>
-<span class="dark:text-rosePine-love text-rosePineDawn-love">/___/____/_/ /_/\_</span>_,_/_/ /_/   \<span class="dark:text-rosePine-iris text-rosePineDawn-iris">____/\____/____/_/ /_/_/</span>
-		</pre>
+<Base nav={true}>
+    <div class="flex flex-col md:flex-row">
+        <div class="w-full md:w-1/2 bg-yellow-400 dark:bg-yellow-200">
+            <h1
+                class="text-center p-4 md:p-8 text-4xl md:text-6xl font-semibold"
+            >
+                Meet The Noob
+            </h1>
+            <p class="py-4 px-6 text-2xl leading-10">
+                Hope you are having a great morning! I am Ishan Joshi and I like
+                to talk tech. Currently at <a
+                    class="underline"
+                    href="https://griet.ac.in">GRIET</a
+                >, I am pursuing my Bachelors in Computer Science. You might
+                find me in India, but mostly, it is fun living on the Internet.
+                Anyways, a little quirky and a lot of fun, I think I am a pretty
+                cool guy. So, let's get to know each other. BTW:) I'm a pretty
+                great guy, if I do say so myself.
+            </p>
+            <div class="text-center p-5">
+                <button class="btn text-3xl md:text-5xl bg-pink-400">
+                    <a href="/about"> Let's Get Going </a>
+                </button>
+            </div>
+            <p class="py-4 px-6 text-2xl leading-10">
+                Or you know, I can take you on a tour of my
+                <a href="/projects">Projects</a> or you are welcome to read my <a
+                    href="/journals">Journals</a
+                >.
+            </p>
+        </div>
+        <div
+            class="flex flex-col justify-center items-center w-full md:w-1/2 bg-blue-400"
+        >
+            <img
+                class="text-center"
+                width="612"
+                height="612"
+                src="/profile.webp"
+                alt="NoobScience Image"
+            /><h1 class="font-bold text-4xl underline decoration-8 pb-5">
+                The Noob
+            </h1>
+        </div>
     </div>
-    <p>
-        I am a <HightLight>
-            <span id="inline-icon" set:html={siGo.svg} /> Backend Developer
-        </HightLight> and <span id="inline-icon" set:html={siLinux.svg} />
-         Linux Enthusiast based in India.
-    </p>
-    <div class="mt-2">
-        <p class="leading-7">
-            Over the past 3 years, I have dedicated my time and whatever
-            attention span I have to learn and understand the world of Software
-            Development. I am currently working on the <span
-                id="inline-icon"
-                set:html={siRust.svg}
-            /> Rust Programming Language. Solving advent of code '23 and writing
-            some really cool CLI tools, I think I can call myself a Rustacean
-            now.
+    <div
+        class="flex flex-col justify-center items-center w-full bg-green-400 dark:bg-green-300"
+    >
+        <h1 class="pt-4 pb-2 text-4xl font-bold">The Noob's Blog</h1>
+        <p class="text-xl leading-10 md:px-10 px-2">
+            This is my place on the <i class="bi bi-globe"></i> internet where I
+            write about things that I find interesting. Sometimes funny, sometimes
+            serious, but always interesting (At least I hope so). So, grab a cup
+            of <i class="bi bi-cup"></i> coffee and enjoy the read.
         </p>
+        <a href={`/blog/${latest.slug}`}>
+            <div
+                class="page-div bg-white m-4 my-2 md:m-10 md:my-5 mt-0 p-4 md:p-10 md:py-5 cursor-pointer hover:translate-y-1"
+            >
+                <h1 class="text-2xl md:text-4xl text-center pb-2 font-bold">
+                    {latest.data.title}
+                </h1>
+                <h2 class="text-xl py-4">{latest.data.date}</h2>
+                <div class="text-xl leading-10">
+                    {latest.body.slice(0, 700) + '...'}
+                </div>
+            </div>;
+        </a>
     </div>
-    <div class="my-5 md:w-2/3 w-full">
-        <h2 class="pb-3 md:text-2xl text-xl font-bold"><Char /> show_blog_posts();</h2>
-        <div>
-            {
-                posts.slice(0, 5).map((post) => (
-                    <div class="pb-2 flex flex-row items-baseline justify-between gap-x-4">
-                        <h2 class="underline decoration-0.5 decoration-dotted">
-                            <Link href={`/blog/${post.slug}`}>
-                                {post.data.title}
-                            </Link>
-                        </h2>
-                        <p class="text-rosePineDawn-subtle dark:text-rosePine-subtle">
-                            {new Date(post.data.date).toLocaleDateString()}
+    <div class="flex flex-col dark:bg-gray-800 dark:text-white md:flex-row">
+        <div class="w-full md:w-4/6">
+            <div class="text-lg p-5 leading-8 pl-10">
+                <h1 class="text-4xl text-center p-4 font-bold">
+                    Ishan's Corner
+                </h1>
+                <p>
+                    Hey! I am Ishan and I love tech. I am a self taught
+                    developer and building cool websites is my thing. Started
+                    programming when I was about 16 and I have been hooked ever
+                    since. Currently, I am pursuing my Bachelors in Computer
+                    Science at <a class="underline" href="https://griet.ac.in"
+                        >GRIET</a
+                    >. When I'm not coding, you can probably find me with my
+                    friends or with a book.
+                </p>
+                <p>
+                    Blogging and writing is something I have always enjoyed. I
+                    have been writing since I was 12. Yeah. I know. I am a nerd.
+                    But, I love it. I have been writing small stories for a long
+                    time. BTW, we can nerd about anything. You can just hit me
+                    up on <a href="/contact">the site</a> itself.
+                </p>
+                <p>
+                    I am currently coding in javascript and python. I use C for
+                    my college stuff. You can check out all my <a href="/skills"
+                        >skills</a
+                    > here.
+                </p>
+                <p></p>
+            </div>
+            <div
+                class="flex flex-col border-t-2 mt-3 border-black dark:border-white md:flex-row"
+            >
+                <div class="w-full dark:text-black bg-violet-300 md:w-3/5">
+                    <h1 class="text-2xl text-center px-4 py-2 font-bold">
+                        <i class="bi bi-circle-fill"></i> Bullets about me
+                    </h1>
+                    <div
+                        class="text-center flex flex-row items-center justify-center text-xl leading-8 p-2"
+                    >
+                        <p>
+                            Tech Enthusiast | Student | Dog Person | Writer |
+                            Geek | Cute
                         </p>
                     </div>
-                ))
-            }
+                    <p class="text-xl px-8">
+                        I'm a pretty great guy, if I do say so myself. If you
+                        enjoyed reading this paper and wanna talk, you can hit
+                        me up.
+                    </p>
+                    <div class="text-center p-4 text-xl">
+                        <button class="btn bg-yellow-300">
+                            <a href="/contact"> Contact Me </a>
+                        </button>
+                    </div>
+                </div>
+                <div
+                    class="w-full md:border-l-2 border-black dark:border-white p-2 md:pl-2 md:w-2/5"
+                >
+                    <h1 class="text-center text-2xl pb-2 font-bold">
+                        <i class="bi bi-chat-left-fill"></i> Site Updates
+                    </h1>
+                    <p class="text-lg leading-8">
+                        In the v.0.1 of the site, the site was rewritten in
+                        Astro. So, I finally migrated from nextjs to Astro.
+                        Don't get me wrong, nextjs is great, but it was a little
+                        too much for a simple site like this. Also, I am
+                        planning to add a lot of new features to the site. Stay
+                        tuned for more updates.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="w-full bg-pink-400 md:w-2/6">
+            <div class="md:border-2 dark:text-black md:border-y-0 border-black">
+                <h1 class="px-8 pt-4 pb-2 text-3xl font-bold">Latest Posts</h1>
+                <p class="text-lg px-8 pt-0.5 pb-2">
+                    Here are some of the latest posts from my blog. You can
+                    check out the rest of them on the <a
+                        class="underline"
+                        href="/blog">blog</a
+                    >
+                    page.
+                </p>
+                <div>
+                    {
+                        posts.map((post) => (
+                            <div class="pl-8 py-2">
+                                <h1 class="text-xl font-base">
+                                    <a
+                                        class="underline"
+                                        href={'/blog/' + post.slug}
+                                    >
+                                        {post.data.title}
+                                    </a>
+                                </h1>
+                            </div>
+                        ))
+                    }
+                </div>
+            </div>
         </div>
     </div>
 </Base>

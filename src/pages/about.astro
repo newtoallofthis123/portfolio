@@ -1,0 +1,45 @@
+---
+export const prerender = true;
+import Base from '../layouts/base.astro';
+---
+
+<Base title="About NoobScience">
+    <div class="dark:text-black flex flex-col md:flex-row">
+        <div class="bg-yellow-300 dark:bg-yellow-200 w-full">
+        <h1 class="text-4xl text-center p-4 font-bold">About The Noob</h1>
+            <p class="px-5 py-2 text-xl leading-10 font-base">
+                Hope you are having a great day! I am Ishan and I am a student
+                and tech enthusiast from India. I am currently pursuing a B.Tech
+                in Computer Science and Engineering from GRIET, Hyderabad. I am
+                a big fan of open source and I love to contribute to open source
+                projects. All of my projects are open source and you can find
+                them on my
+                <a class="underline" href="/projects">Projects</a>. Linux and
+                Python Guy, currently using Windows and JavaScript, but they are
+                okay.
+            </p>
+            <p class="px-5 py-2 text-xl leading-10 font-base">
+                I love using and trying out new technologies and I am always
+                looking for new things to learn. When I am not coding, I like to
+                talk long walks, listen to music, watch movies and TV shows, and
+                play video games. I am also a dog person and my dog Lyka, is
+                wonderful. Anyways, I don't want to bore you with my life story,
+                so I will end it here. I am quite an open person, so if you want
+                to talk to me, contact me!
+            </p>
+            <div class="text-center p-4">
+                <button class="w-full btn bg-blue-300">
+                    <a href="/contact">Contact Me</a>
+                </button>
+            </div>
+        </div>
+        <div class="justify-center items-center md:block">
+            <img
+                class="w-full md:w-80"
+                src="/assets/lyka.webp"
+                width={420}
+                alt=""
+            />
+        </div>
+    </div>
+</Base>

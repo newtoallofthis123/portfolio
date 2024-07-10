@@ -1,46 +1,247 @@
 ---
-import {getEntry} from 'astro:content'
-import Base from '../../layouts/base.astro';
+import { getCollection, getEntry } from 'astro:content';
+import BlogNav from '../../components/blog_nav';
+import BlogBase from '../../layouts/blog_base.astro';
+// const { frontmatter } = Astro.props;
+import { themes } from './themes';
+import { calcReadTime } from '../../utils';
 import { Image } from 'astro:assets';
+const { slug } = Astro.params;
 
-const {slug} = Astro.params;
-
-const post = await getEntry('blog', slug as string)
+const post = await getEntry('blog', slug as string);
 
 // @ts-ignore
 const { Content } = await post?.render();
+const textContent = post?.body;
 
-const meta = post?.data;
+const frontmatter = post?.data;
+
+//@ts-ignore
+const theme = themes[frontmatter.theme] || themes['default'];
+let posts = await getCollection('blog');
+posts.sort((a: any, b: any) => b.data.date.getTime() - a.data.date.getTime());
+let recommended = posts.filter(
+    (post) =>
+        post.data.category === frontmatter?.category &&
+        post.data.title !== frontmatter?.title
+);
+posts.map((post) => {
+    frontmatter?.tags?.map((tag: any) => {
+        if (
+            post.data?.tags?.includes(tag) &&
+            post.data?.title !== frontmatter?.title &&
+            !recommended.includes(post)
+        ) {
+            recommended.push(post);
+        }
+    });
+});
+posts = posts.filter(
+    (post) =>
+        post.data.title !== frontmatter?.title &&
+        post.data.draft !== true &&
+        !recommended.includes(post)
+);
+recommended = recommended.filter((post) => post.data.draft !== true);
+console.log(theme);
 ---
 
-<Base title={meta?.title} emoji={meta?.emoji} color={meta?.color}>
-    <div class="md:px-2">
-        <h1 class="md:text-4xl text-3xl font-black">
-            {meta?.title}
-        </h1>
-        <p class="mt-2">
-            {meta?.description}
-        </p>
-        <p class="mt-2 text-md dark:text-rosePine-subtle text-rosePineDawn-subtle">
-            Posted on {
-                meta?.date ? new Date(meta.date).toDateString() : null
-            }
-        </p>
+<BlogBase
+    title={frontmatter?.title + ' | Ishan Writes'}
+    description={frontmatter?.description}
+    color={theme.color}
+    bg={theme.background}
+>
+    <style
+        define:vars={{
+            color: theme.color,
+            bg: theme.background,
+            textColor: theme.textColor,
+            textBg: theme.textBackground,
+            full: theme.full,
+        }}
+    ></style>
+    <main id={theme.full ? 'full' : ''}>
+        <div class="flex flex-row justify-center p-1">
+            <div
+                id="content"
+                class="md:relative w-full md:mr-20 pb-2 md:w-4/6 p-2 md:p-5"
+            >
+                <div id="main" class="py-2 md:py-3">
+                    <p class="py-4 font-bold text-2xl md:text-4xl">
+                        {frontmatter?.emoji}
+                    </p>
+                    <h1 class="py-4 font-bold text-2xl md:text-4xl">
+                        {frontmatter?.title}
+                    </h1>
+                </div>
+                <div>
+                    {
+                        frontmatter?.img && (
+                            <div class={`p-2 py-5`}>
+                                <Image
+                                    class=" rounded-md"
+                                    src={frontmatter.img}
+                                    alt={frontmatter?.title}
+                                />
+                            </div>
+                        )
+                    }
+                </div>
+                <!-- <slot /> -->
+                <Content />
+            </div>
+            <div id="recommended" class="hidden md:block md:mt-10 md:w-1/5">
+                <div style="height: 50vh">
+                    <div class="border-b-2 border-black dark:border-white py-5">
+                        <h2 class="text-2xl p-0 py-2">🤖 Metadata</h2>
+                        <p class="text-sm font-light p-1 leading-6">
+                            This post was written <span class="text-green-500">
+                                {
+                                    // calculate days since post was written
+                                    Math.floor(
+                                        (new Date().getTime() -
+                                            //@ts-ignore
+                                            frontmatter?.date?.getTime()) /
+                                            (1000 * 60 * 60 * 24)
+                                    )
+                                } days ago
+                            </span> on {frontmatter?.date.toDateString()} by {
+                                frontmatter?.author
+                            }.
+                        </p>
+                        <p class="text-sm font-light p-1 leading-6">
+                            You have a happy <span class="text-red-500"
+                                >{calcReadTime(textContent)}</span
+                            > Minutes of reading ahead of you.
+                        </p>
+                        <p class="text-sm font-light p-1 leading-6">
+                            Apparently it is categorized as <a
+                                href={'/blog/tags/' + frontmatter?.category}
+                                style="text-decoration:none;"
+                                class="text-blue-500">{frontmatter?.category}</a
+                            >
+                        </p>
+                        <p class="text-sm font-light p-1 leading-6">
+                            The Author Drank {
+                                Math.floor(calcReadTime(textContent) % 4)
+                            } cups of coffee while writing this.
+                        </p>
+                    </div>
+                    <div
+                        class="p-2 my-5 flex flex-col justify-center items-center"
+                    >
+                        <h2 class="p-4 text-lg">Subscribe to my Newsletter</h2>
+                        <iframe
+                            src="https://noobscience.substack.com/embed"
+                            width="280"
+                            class="rounded-md bg-white"
+                            frameborder="0"
+                            scrolling="no"></iframe>
+                    </div>
+                    <div>
+                        <h2
+                            class="text-2xl border-t-2 border-black dark:border-primaryWhiteText p-5"
+                        >
+                            Links and Stuff
+                        </h2>
+                        <button class="btn font-sans bg-yellow-300"
+                            ><a
+                                href={'https://github.com/newtoallofthis123/About_Astro/tree/main/src/pages' +
+                                    post?.slug +
+                                    '.mdx'}>Edit The Source</a
+                            ></button
+                        >
+                        <!-- {
+                            frontmatter.substack && (
+                                <button class="btn font-sans bg-yellow-300">
+                                    <a href={frontmatter.substack}>
+                                        Read on Substack
+                                    </a>
+                                </button>
+                            )
+                        } -->
+                        <button class="btn font-sans bg-green-300"
+                            ><a
+                                href={'https://twitter.com/intent/tweet?url=https://beta.noobscience.rocks' +
+                                    post?.slug}>Share on Twitter</a
+                            ></button
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+        {
+            frontmatter?.tags && (
+                <div class="flex flex-wrap justify-center items-center p-2">
+                    {frontmatter?.tags.map((tag) => (
+                        <a
+                            href={'/blog/tags/' + tag}
+                            class="p-2 m-2 bg-gray-200 text-black rounded-md"
+                        >
+                            {tag}
+                        </a>
+                    ))}
+                </div>
+            )
+        }
         <div>
             {
-                meta?.img && (
-                    <div class={`p-2 py-5`}>
-                        <Image
-                            class=" rounded-md"
-                            src={meta.img}
-                            alt={meta?.title}
-                        />
+                recommended.length > 0 && (
+                    <div>
+                        <h1 class="text-2xl md:pl-20 font-bold pt-2">
+                            You might also like
+                        </h1>
+                        <div class="flex border-gray-500 flex-col p-2 justify-center">
+                            {recommended.map((rec) => (
+                                <div class="md:pl-8 flex flex-col md:flex-row justify-center items-center px-5 py-2">
+                                    <div class="md:pl-8 w-full">
+                                        <h2 class="text-xl font-bold p-2">
+                                            <a
+                                                href={'/blog/' + rec.slug}
+                                                class="no-underline"
+                                            >
+                                                {rec.data.emoji}{' '}
+                                                {rec.data.title}
+                                            </a>
+                                        </h2>
+                                        <p class="text-base font-light p-2">
+                                            {rec.data.description}
+                                        </p>
+                                        <p class="text-base font-light p-2">
+                                            {rec.data.date.toDateString()}{' '}
+                                        </p>
+                                        <a
+                                            href={'/blog/' + rec.slug}
+                                            class="text-base font-light p-2 underline"
+                                        >
+                                            Read More
+                                        </a>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 )
             }
         </div>
-    </div>
-    <div class="md:px-2 py-1">
-        <Content />
-    </div>
-</Base>
+        <div class="p-2 md:p-5">
+            <h1 class="font-bold text-center p-2 text-2xl">About the Author</h1>
+            <p class="px-10 py-1 text-base leading-8">
+                Ishan Joshi is a student and open source enthusiast. He goes by
+                NoobScience online. He is currently pursuing his Bachelors in
+                Computer Science and Engineering from <a
+                    href="https://griet.ac.in">GRIET</a
+                >. When he is not coding, you can find him watching a movie or
+                just chilling. You can find him on <a
+                    href="https://twitter.com/noobscience1">Twitter</a
+                > and basically any <a href="/social">other</a> social media platforms.
+                Ask him a question, however, beware, you might get a reply that you
+                would not expect. You can also subscribe to his <a
+                    href="https://noobscience.substack.com">newsletter</a
+                > to get updates about his latest posts. Thanks for reading this
+                far. Have a nice day!
+            </p>
+        </div>
+    </main>
+</BlogBase>

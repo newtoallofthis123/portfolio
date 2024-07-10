@@ -2,34 +2,63 @@ import React from 'react';
 import '../styles/nav.css';
 import { motion } from 'framer-motion';
 
-export default function Nav({ emoji }: any) {
+const default_options = [
+    'about',
+    'blog',
+    'projects',
+    'skills',
+    'resume',
+    'quips',
+    'contact',
+    'github',
+    'social',
+];
+
+export default function NormalNav({
+    options = default_options,
+    title = 'NoobScience',
+}) {
     const [nav, setNav] = React.useState(false);
     return (
         <>
             <nav>
-                <div
-                    className="bg-white dark:bg-gray-950 text-black dark:text-white"
-                    id="nav"
-                >
-                    <div className="flex flex-row justify-center items-center p-5">
-                        <img
-                            width={192}
-                            height={192}
-                            className="lg:w-24 w-8"
-                            src="/logo192.webp"
-                            alt="NoobScience Logo"
-                        />
-                        <a
-                            href="/"
+                <div className="dark:bg-gray-950 dark:text-white" id="nav">
+                    <div className="flex flex-row border-y-2 border-black dark:border-white justify-between items-center p-2">
+                        <div className="flex-shrink-0 flex flex-row justify-around">
+                            <img
+                                width={192}
+                                height={192}
+                                className="w-10 h-10 md:w-12 md:h-12"
+                                src="/logo192.webp"
+                                alt="NoobScience Logo"
+                            />
+                            <a
+                                href="/"
+                                className="px-5 nav-title font-bold uppercase text-center text-4xl md:text-5xl no-underline"
+                            >
+                                {title}
+                            </a>
+                        </div>
+                        <ul
                             className="
-                    px-5
-                    nav-title font-bold uppercase text-center text-4xl
-                    no-underline
-                    lg:text-9xl
-                    "
+                            items-end
+                        hidden gap-x-6
+                        list-none
+                        lg:flex flex-row p-5 justify-center border-black
+                        "
                         >
-                            NoobScience
-                        </a>
+                            {options.map((link) => (
+                                <li key={link} className="text-2xl">
+                                    <a
+                                        href={`/${link}`}
+                                        className="special_underline"
+                                    >
+                                        {link.charAt(0).toUpperCase() +
+                                            link.slice(1)}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
                         <div
                             onClick={() => setNav(!nav)}
                             className="space-y-1 cursor-pointer z-50 lg:hidden"
@@ -63,18 +92,7 @@ export default function Nav({ emoji }: any) {
                                 transition={{ duration: 0.5 }}
                             >
                                 <ul className="flex flex-col gap-4">
-                                    {[
-                                        'about',
-                                        'blog',
-                                        'projects',
-                                        'skills',
-                                        'resume',
-                                        'quips',
-                                        'contact',
-                                        'github',
-                                        'social',
-                                        'notes',
-                                    ].map((link) => (
+                                    {options.map((link) => (
                                         <li key={link} className="text-2xl">
                                             <a
                                                 href={`/${link}`}
@@ -89,35 +107,6 @@ export default function Nav({ emoji }: any) {
                             </motion.div>
                         )}
                     </div>
-                    <ul
-                        className="
-                        hidden gap-x-12
-                        lg:flex flex-row border-y-4 p-5 justify-center border-black dark:border-white
-                        "
-                    >
-                        {[
-                            'about',
-                            'blog',
-                            'projects',
-                            'skills',
-                            'resume',
-                            'quips',
-                            'contact',
-                            'github',
-                            'social',
-                            'notes',
-                        ].map((link) => (
-                            <li key={link} className="text-2xl">
-                                <a
-                                    href={`/${link}`}
-                                    className="special_underline"
-                                >
-                                    {link.charAt(0).toUpperCase() +
-                                        link.slice(1)}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
                 </div>
             </nav>
         </>
