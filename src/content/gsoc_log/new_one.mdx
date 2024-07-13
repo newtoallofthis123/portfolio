@@ -1,0 +1,60 @@
+---
+title: Possible New Approach
+description: I don't know why I keep doing this
+workType: Other
+date: 2024-07-13
+layout: "../../layouts/blog_post.astro"
+---
+
+The su implementation is almost ready, but I am still working on it.
+However, a new idea came to my mind, one which is highly experimental, yet has a very good chance of 
+actually working and behave as expected in the future.
+
+So, the main problem that was encountered in the previous security model was the fact that the 
+child process was essentially a open honey pot for man in the middle attacks.
+Essentially speaking, since we were using a socket to communicate between a priveleged parent and 
+an unpriveleged child, if someone was able to connect to the socket, they could pass in any weird stuff
+to the child process. Now the problem is that the child process was essentially open access to the
+`sh -c` command.
+The child process was, in a humanized sense, not *thinking*, it was just a shell.
+
+Well the first thought would be to run the parent itself as a unpriveleged user and this would be a
+good idea. However, it's not quite as simple as that.
+The parent process is the one that is responsible for actually catching and detecting the keystrokes.
+Without it running as a root process, it would not be able to catch the keystrokes.
+The parent, once it catches the keystrokes, processes it and sends it to the child.
+By processes it, I mean reads keystrokes and maps it to a command using the config parser.
+
+So, why don't we let it do what it would do best: read keystrokes.
+This Approach aims to shift the responsibility of the parent to the child.
+
+Common Security Knowledge dictates that the safest way to execute a command is to generate the command in the
+same process that is going to execute it, however, we would need the keystrokes to be able to determine 
+what the command is in the first place.
+
+So, in this model, both the server and the client would exist, communicating with each other through a socket file.
+The client (root process) would be responsible for catching the keystrokes and packaging them into a commonly 
+understandable format; a simple deserializeable struct, json or even just a string.
+The server would then recieve the keystrokes, process them within itself.
+So the command mapping as a whole is happening within the server itself, the same place where we are executing the
+command too.
+
+This would mean that the server would be responsible for mapping the command, and the client would be responsible
+for providing the necessary keystrokes data to the server.
+So this would mean that instead of just being a glorified shell mapper, the server would be the one that actually
+maps the command and executes it.
+
+This would have the following benefits:
+1. No more weird env stuff or any root to user mapping shenanigans.
+2. Commands are never sent over the network.
+3. The server and client both specialize in their own tasks.
+4. Reduced risk of man in the middle attacks.
+5. Simpler to maintain.
+6. Too much new code will not be introduced either, just existing code will be repurposed in the server.
+
+
+This is a highly experimental approach and I am not sure if it would work, but it's worth a shot.
+If this works, it would essentially solve our security model problem in a very easy to implement way.
+
+I will however, still be working on the `su` approach till I get this approved, however, it might be a good
+solution.
