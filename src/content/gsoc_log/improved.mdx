@@ -1,0 +1,29 @@
+---
+title: It's looking Good
+description: I made some improvements since the last post
+date: 2024-08-03
+workType: Other
+layout: "../../layouts/blog_post.astro"
+---
+
+<video src="/vids/swhkd_demo_improved.mp4" autoplay muted></video>
+
+As mentioned in the previous blog post, I decided to use the existing server client architecture to get the environment from the server and pass it on to the client. This way, the client would think that it is in fact from the user space.
+
+Futhurmore, I decided to daemonize the server so that it can be persistent across the process life cycle. This way, every time a process is spawned, the server would quickly respond with the new environment. This would also ensure that any changes to the environment get detected directly.
+
+For now, you can launch SWHKD with the following command:
+
+```bash
+./swhks && sudo ./swhkd
+```
+
+In the previous system, the server would have had to be daemonized and running all the time for the client to work. However, with this new approach, the server only has work to do in the beginning and then it can be shut down. The client would still work as expected.
+However, doing this was causing a major bug where sometimes, the client's listen
+socket would be not setup before the server comes into play. This would cause the server to crash and the client to not work at all.
+
+So I decided to daemonize the server and make it persistent until the environment transfer is done. After the transfer, the server would shut down and the client would continue to work as expected.
+
+Moreover, I am also looking into ways to transfer the configuration file to the client. This would solve another major bug in the system where the client would not be able to read the right configuration file.
+
+It is looking pretty good now and I am excited to see how it turns out in the end.

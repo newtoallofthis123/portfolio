@@ -3,21 +3,21 @@ title: It works!
 description: This approach actually works with all of the criteria
 date: 2024-07-22
 workType: Other
-layout: "../../layouts/blog_post.astro"
+layout: ../../layouts/blog_post.astro
 ---
 
 <video src="/vids/swhkd_demo.mp4" controls autoplay muted></video>
 
-Turns out, the previous approach that I talked about involving the sending of 
-keystrokes across a standard channel to the server was filled with security 
+Turns out, the previous approach that I talked about involving the sending of
+keystrokes across a standard channel to the server was filled with security
 vulnerability. Turns out that sending keystrokes across the socket has the same
 kind of repercussions as sending commands across the socket.
-Additionally, it would essentially be a *key logger* with the right kind of man 
+Additionally, it would essentially be a *key logger* with the right kind of man
 in the middle attack. So I should thank Aakash for that critical insight that I missed
 while considering that approach.
 
 So, I decided to just stick with the `su` approach, but instead of trying so hard
-to get the user environment from a program not running in that space at all, I 
+to get the user environment from a program not running in that space at all, I
 decided to use the existing server client architecture.
 However, I modified this to only get what I need the most from the server, the fact
 that it is from the user space. So, if I would be able to get the `env` from the
@@ -27,7 +27,7 @@ to the program that it is in fact from the user space.
 while our rust program would set the right environment variables for the child process.
 
 The daemon in this case, would bind to a socket and listen for connections from
-the client. The moment the server connects to the daemon, it shuts down the 
+the client. The moment the server connects to the daemon, it shuts down the
 socket connection and retains the environment.
 
 This implementation is enough to get the whole setup working.
