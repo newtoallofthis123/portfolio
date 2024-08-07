@@ -8,46 +8,47 @@ import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
-    output: 'server',
-    prefetch: true,
-    site: 'https://www.noobscience.in',
-    adapter: vercel({
-        webAnalytics: { enabled: true },
-    }),
-    integrations: [react(), tailwind(), mdx(), sitemap()],
-    image: {
-        service: squooshImageService(),
+  output: 'server',
+  prefetch: true,
+  site: 'https://www.noobscience.in',
+  adapter: vercel({
+    webAnalytics: { enabled: true },
+  }),
+  integrations: [react(), tailwind(), mdx(), sitemap()],
+  image: {
+    service: squooshImageService(),
+  },
+  markdown: {
+    gfm: true,
+    shikiConfig: {
+      theme: 'rose-pine',
+      langs: [
+        'javascript',
+        'html',
+        'php',
+        'css',
+        'typescript',
+        'tsx',
+        'jsx',
+        'json',
+        'markdown',
+        'mdx',
+        'bash',
+        'shell',
+        'rust',
+        'c',
+        'cpp',
+        'go',
+        'java',
+        'python',
+        'ruby',
+      ],
+      wrap: false,
     },
-    markdown: {
-        gfm: true,
-        shikiConfig: {
-            theme: 'rose-pine',
-            langs: [
-                'javascript',
-                'html',
-                'php',
-                'css',
-                'typescript',
-                'tsx',
-                'jsx',
-                'json',
-                'markdown',
-                'mdx',
-                'bash',
-                'shell',
-                'rust',
-                'c',
-                'cpp',
-                'go',
-                'java',
-                'python',
-                'ruby',
-            ],
-            wrap: false,
-        },
-        syntaxHighlight: 'shiki',
-    },
-    // redirects: {
-    //     "/contact": "https://bento.me/noob",
-    // },
+    syntaxHighlight: 'shiki',
+  },
+  redirects: {
+    '/contact': 'https://bento.me/noob',
+    '/resume': '/resume_v_4.pdf',
+  },
 });
