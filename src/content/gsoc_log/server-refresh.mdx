@@ -1,0 +1,50 @@
+---
+title: Env refresh
+description: Now that we have the env, why not keep it up to date
+date: 2024-08-14
+workType: Other
+layout: "../../layouts/blog_post.astro"
+---
+<video src="/vids/swhkd_refresh_demo.mp4" autoplay muted loop></video>
+
+So now that we have the env from the server and our system seems to work quite well, the next step would be to focus much more on usability
+and improving the UX of the project.
+Since trying to condense the server into the daemon was not really possible, we still able to reduce the importance of the server.
+Now it's only functionality is broadcasting the env of the userspace where it is running into the socket so that it can be picked up by the
+priveledged daemon.
+
+One idea of make sure that we always have the latest env and keep up with any changes that the user makes, we could daemonize the server, 
+making it run in the background, ready for the daemon to request the env whenever it requires it.
+This was pretty simple to do with the `nix` crate.
+
+```rust
+let _ = daemon(true, false);
+```
+
+However, the tricky part was to figure out when the daemon would need an env refreh anyways.
+So, we came up with an idea of a cron like job in the event loop, which would have a non blocking counter counting in seconds.
+This can be configured by the user through a flag called `--refresh`.
+
+```bash
+./swhks && doas ./swhkd -r 30
+```
+
+This would mean that it would refresh the env every 30 seconds and depending on your use case, you may probably set this up in a higher value:
+In minutes, probably 5.
+The actual process of refreshing the env is pretty non resource intensive, the overall memory and CPU increase while refreshing is pretty negligible
+(+4MB, +0.5%).
+
+The actual way to refresh the env is too quite simple:
+
+```rust
+_ = &mut next_env, if sock_mutex => {
+    log::info!("Refreshing Env");
+    env = refresh_env(&uname, invoking_uid).unwrap();
+    next_env.as_mut().reset(Instant::now() + Duration::from_secs(server_cooldown));
+}
+```
+
+The `refresh_env` is the new abstraction function introduced to deal with filling in the env from the server.
+The actual process of getting the env from the server is blocking, however, it only tries about 5-6 times before actually quitting the daemon with an error.
+
+I am next looking into trying to use `notify-send` to better improve the user experience.
