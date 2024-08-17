@@ -47,9 +47,9 @@ const mlLogContent = defineCollection({
     schema: () =>
         z.object({
             title: z.string(),
-            summary: z.string().optional(),
+            summary: z.string(),
             date: z.date().default(new Date()),
-            tags: z.array(z.string()).optional(),
+            tags: z.array(z.string()),
         }),
 });
 

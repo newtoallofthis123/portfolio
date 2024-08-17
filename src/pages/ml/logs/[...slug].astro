@@ -22,7 +22,7 @@ const meta = post?.data;
         </div>
         <div class="border-2 dark:border-rosePine-subtle border-rosePineDawn-subtle p-2 my-4 text-rosePineDawn-subtle dark:text-rosePine-subtle">
             <p class="mt-1 text-md ">
-                Tags: {meta?.tags.join(',')}
+                Tags: {meta?.tags ? meta?.tags.join(','): ''}
             </p>
             <p class="mt-0.5 text-md">
             On: {
