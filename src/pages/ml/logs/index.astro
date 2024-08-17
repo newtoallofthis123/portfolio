@@ -1,34 +1,29 @@
 ---
-import Base from '../../layouts/base.astro';
-import Char from '../../spans/char.astro';
-import Highlight from '../../spans/highlight.astro';
-import Link from '../../spans/link.astro';
+import Base from '../../../layouts/base.astro';
+import Char from '../../../spans/char.astro';
+import Highlight from '../../../spans/highlight.astro';
+import Link from '../../../spans/link.astro';
 import { getCollection } from 'astro:content';
 
-let logs = await getCollection('devlog');
+let logs = await getCollection('ml_log');
 logs = logs.sort(
     (a: any, b: any) =>
         new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 ---
 
-<Base title='Gsoc Dev Logs | NoobScience'>
+<Base title='ML Logs | NoobScience'>
     <div>
         <h1 class="text-2xl font-bold pt-2 pb-4">
-            <Char char='()' /> dev.logs;
+            <Char char='()' /> ml.logs;
         </h1>
         <div>
             <p class="pb-2">
-                <Highlight>My Dev logs</Highlight>
+                <Highlight>My ML Journey</Highlight>
             </p>
             <p class="leading-7">
-                Recently, I've been hearing a lot about how developers need to
-                maintain logs of their work and how it has so many benefits.
-            </p>
-            <p class="leading-7">
-                So I finally decided to start maintaining logs of any code or linux
-                stuff that I do. Hopefully these will be put to use sometime in
-                the future.
+                These are my logs documenting me learning ML.
+                These are both to keep me accountable and also to act as my personal journal for everything related to ML.
             </p>
             <p class="leading-7">
                 Commit history and changes can be found on the github repo of the project.
@@ -41,18 +36,21 @@ logs = logs.sort(
     <h2 class="py-4 text-xl font-bold">
         <Char char="?" /> logs.sort();
     </h2>
-    <div class="md:w-2/3 md:p-0 pr-2">
+    <div class="md:w-3/3 md:p-0 pr-2">
         {
             logs.map((log) => (
                 <div class="pb-2 flex flex-row items-center justify-between gap-x-4">
                     <h2>
-                        <Link href={`/gsoc/logs/${log.slug}`}>
+                        <Link href={`/ml/logs/${log.slug}`}>
                             {log.data.title}
                         </Link>
                     </h2>
                     <p class="text-rosePineDawn-subtle dark:text-rosePine-subtle">
                         {new Date(log.data.date).toLocaleDateString()}
-                        </p>
+                    </p>
+                    <p class="text-rosePineDawn-subtle dark:text-rosePine-subtle">
+                {log.data.tags.join(',')}
+                    </p>
                 </div>
             ))
         }

@@ -48,7 +48,8 @@ export default defineConfig({
     syntaxHighlight: 'shiki',
   },
   redirects: {
-    '/contact': 'https://bento.me/noob',
     '/resume': '/resume_v_4.pdf',
+    '/ml': '/ml/logs',
+    '/gsoc': '/gsoc/logs'
   },
 });
