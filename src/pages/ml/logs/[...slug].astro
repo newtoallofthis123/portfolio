@@ -1,11 +1,11 @@
 ---
 import {getEntry} from 'astro:content'
-import Base from '../../layouts/base.astro';
+import Base from '../../../layouts/base.astro';
 import { siGithub } from 'simple-icons';
 
 const {slug} = Astro.params;
 
-const post = await getEntry('devlog', slug as string)
+const post = await getEntry('ml_log', slug as string)
 
 // @ts-ignore
 const { Content } = await post?.render();
@@ -22,15 +22,15 @@ const meta = post?.data;
         </div>
         <div class="border-2 dark:border-rosePine-subtle border-rosePineDawn-subtle p-2 my-4 text-rosePineDawn-subtle dark:text-rosePine-subtle">
             <p class="mt-1 text-md ">
-                Summary: {meta?.description ? meta?.description : null}
+                Tags: {meta?.tags ? meta?.tags.join(','): ''}
             </p>
             <p class="mt-0.5 text-md">
-            Marked: {
+            On: {
                 meta?.date ? new Date(meta.date).toDateString() : null
             }
             </p>
             <p class="mt-0.5 text-md">
-                Category: { meta?.workType ? meta?.workType : null }
+                Summary: { meta?.summary }
             </p>
         </div>
     </div>

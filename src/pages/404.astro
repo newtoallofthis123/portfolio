@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/base.astro';
+import Char from '../spans/char.astro';
+---
+
+<Base title="404 Not Found">
+    <h1 class="text-2xl">
+        <Char char='!' />
+        404
+    </h1>
+    <p>
+        I have no idea why you thought there was a page at that location. I hate to break it to you, but it's a 404.
+    </p>
+    <p>
+        But here, a pup will cheer you up!
+    </p>
+    <div>
+        <img src="https://http.dog/404.jpg" alt="404 Dog image">
+    </div>
+</Base>
