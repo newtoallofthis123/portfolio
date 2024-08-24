@@ -52,14 +52,4 @@ export default defineConfig({
     '/ml': '/ml/logs',
     '/gsoc': '/gsoc/logs'
   },
-    vite: {
-        ssr: {
-            noExternal: ['react-tweet']
-        }
-    },
-    build: {
-        rollupOptions: {
-            external: ['react-tweet']
-        }
-    }
 });
