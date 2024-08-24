@@ -20,7 +20,7 @@ This changelog will be mirrored over to a Github gist and will be submitted as t
 - An IPC based protocol was being used in the project to communicate between the main daemon that was in the root user space and a server that was in the user space.
 - The root daemon was responsible for capturing the key events and the user daemon was responsible for executing the commands that were associated with the key events.
 - This however was causing security concerns as documented by the various CVEs that were raised against the project.
-- We finally came up with a solution using `su` that would allow the daemon to execute the commands in the user space itself.
+- We finally came up with a solution using de-escalated thread based approach that would allow the daemon to execute the commands in the user space itself.
 
 ## The Problem
 
@@ -48,14 +48,7 @@ Moreover, we also had written functions to get the current uid and the current u
 
 While we were trying to pass the environment variables to the user space, we came across the `su` command, which allows you to switch the user
 and execute a command in the user space.
-We had initially tried using it to get the env for the user by running 
-
-```bash
-su -c 'env' - <username>
-```
-
-but this was not working as expected.
-So intead, we decided to use the `su` command to switch the user and execute the command in the user space itself.
+We decided to use the `su` command to switch the user and execute the command in the user space itself.
 However, we were still trobuled by the fact that the environment variables were not being passed to the user space.
 
 So, to finally solve this, it was decided that instead of abondoning the IPC model, we would instead make the daemon
@@ -67,7 +60,26 @@ This would mean that all of the CVEs that were raised against the project would 
 since even though the IPC protocol existed, it was now *emitting information* rather than acting as an execution medium.
 
 So now, the daemon could request the server for the environment variables and then use `su` to execute the command in the user space.
-This approach works flawlessly.
+This approach seemed to work flawlessly and the daemon was now able to execute the commands in the user space.
+
+However, we ran into a problem in which when we use a setuid binary of the swhkd daemon, `su` was unable to 
+authenticate and effectively de-escalate the privileges of the child process.
+This was because since the setuid binary was now owned by the root user, `su` was recognizing the commands being executed by the daemon as root
+and was refusing to de-escalate the privileges of the child process unless it was given the user's password.
+This would not be possible for a hotkey daemon and hence we had to switch to a different approach.
+
+## Threads, but with a twist
+
+So we decided to switch back to the thread based approach that we had initially abandoned.
+However, now that we had decided to get the `env` from the server, the thread based approach seemed to be a lot more viable since
+it's main problem was now solved.
+
+So the daemon would now spawn a thread that would be valid throughout the lifetime of the daemon.
+A channel based approach was setup where all of the commands would be sent to the thread and the thread would execute them in the user space.
+This was simple and effective and the daemon was now able to execute the commands in the user space.
+
+So with this approach, we have all of the advantages that the server seperation provided us with (as mentioned above) and also the 
+fact that it was working with both setuid and sudo / doas escalated binaries.
 
 <video src="/vids/swhkd_demo_improved.mp4" autoplay muted></video>
 
@@ -128,12 +140,22 @@ This is reminiscent of the old IPC model as such:
 ./swhks && doas ./swhkd
 ```
 
+The `doas` or `sudo` can be skipped by making the swhkd binary a setuid binary.
+This can be done by running the following command:
+
+```bash
+sudo chown root:root swhkd
+sudo chmod u+s swhkd
+```
+
 Right after this is done, the first connection to the server is made and the server sends the env to the daemon.
 This information is stored in the `env` struct instance and this is exchanged and valid throughout the process life cycle.
 The `XDG_CONFIG_HOME` is also set to `~/.config/swhkd` and the config file is read from there if it exists.
+A thread is spawned that is valid throughout the lifetime of the daemon.
+The thread is also de-escalated to the user space.
 
 Next, the daemon starts listening for the key events.
-When a key event is detected, the daemon uses `su` to execute the command in the user space.
+When a key event is detected, the daemon just sends it to the thread through the channel.
 Concurrently, there is a cron job that sends the env to the daemon every 650ms by default.
 This ensures that the env is always fresh and the daemon can always execute the commands in the user space.
 
@@ -146,7 +168,6 @@ Here are some of the future work that I would like to do on the project:
 - The daemon currently does not have a lot of error handling and the error messages are not very descriptive.
 - Figure out if `notify-send` can be used to send notifications to the user.
 - Try adding tracing logs to the daemon to make it easier to debug.
-- `set_uid` for the daemon to escalate on startup.
 
 ## Conclusion
 

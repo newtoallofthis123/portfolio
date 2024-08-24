@@ -1,0 +1,72 @@
+---
+title: Back to threads
+description: Replacing su with threads
+workType: Other
+date: 2024-08-22
+layout: "../../layouts/blog_post.astro"
+---
+
+So the problem with the su approach was that when I was trying to run
+`swhkd` as a setuid binary, it's owner was root. This meant that su would recognize
+any commands being executed by `swhkd` as root, and not the user.
+Hence, when we actually want to de-escalate the privileges of the child process,
+it asks us for the user's password, which is less than ideal for a hotkey daemon.
+
+Hence, after trying for a really long time, I decided to switch to a different approach.
+When I was last using threads to execute the commands, we had decided to not use it because
+of the `env` problem. However, now that we have a solution to the `env`, we can use de-escalated
+threads to run the commands again.
+
+This essentially works as follows:
+
+```rust
+tokio::spawn(async move {
+    setgid(Gid::from_raw(user_id)).unwrap();
+    setuid(Uid::from_raw(user_id)).unwrap();
+
+    let mut cmd = Command::new("sh");
+    cmd.arg("-c").arg(command).stdin(Stdio::null());
+    for (key, value) in pairs {
+        cmd.env(key, value);
+    }
+
+    match cmd.spawn() {
+        Ok(_) => log::info!("Command executed successfully."),
+        Err(e) => log::error!("Failed to execute command: {}", e),
+    }
+});
+```
+
+This was designed to spawn a new thread for each command that we want to execute.
+However, this we are creating a new thread for each command, which is not ideal.
+We can instead use a single thread that is valid throughout the lifetime of the daemon and we can communicate with it using a channel.
+It would look something like this:
+
+```rust
+let (tx, rx) = mpsc::channel::<String>();
+
+tokio::spawn(async move {
+    while let Some(command) = rx.recv().await {
+        setgid(Gid::from_raw(user_id)).unwrap();
+        setuid(Uid::from_raw(user_id)).unwrap();
+
+        let mut cmd = Command::new("sh");
+        cmd.arg("-c").arg(command).stdin(Stdio::null());
+        for (key, value) in pairs {
+            cmd.env(key, value);
+        }
+
+        match cmd.spawn() {
+            Ok(_) => log::info!("Command executed successfully."),
+            Err(e) => log::error!("Failed to execute command: {}", e),
+        }
+    }
+});
+
+// In the main thread
+tx.send(command).await.unwrap();
+```
+
+This way, we can send commands to the thread and it will execute them with the user's privileges.
+Moreover, this also works well with the setuid binary, as the thread is running with the user's privileges and doesn't
+need to ask for the user's password.
