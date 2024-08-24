@@ -56,5 +56,10 @@ export default defineConfig({
         ssr: {
             noExternal: ['react-tweet']
         }
+    },
+    build: {
+        rollupOptions: {
+            external: ['react-tweet']
+        }
     }
 });
