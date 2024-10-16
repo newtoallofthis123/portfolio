@@ -85,16 +85,16 @@ const BASE_URL = 'http://' + Astro.url.host;
         <main
             class="flex flex-col dark:text-rosePine-text text-rosePineDawn-text justify-center items-center"
         >
-            <div class="md:w-3/5 w-full md:p-0 p-2">
+            <div class="lg:w-2/3 w-full p-0">
                 <Nav emoji={emoji} client:load />
                 <div
-                    class="md:p-4 p-1 pt-2 md:my-5 md:mb-1 border-rosePineDawn-text dark:border-neutral-100 md:border-2"
+                    class="md:p-4 p-3 pt-2 md:my-5 md:mb-1 border-rosePineDawn-text dark:border-neutral-100 md:border-2"
                 >
                     <slot />
                 </div>
                 <footer
                     transition:persist
-                    class="text-rosePine-subtle md:mb-10 mb-2 text-sm md:flex md:flex-row md:items-center md:justify-between md:gap-x-4"
+                    class="text-rosePine-subtle md:mb-10 mb-2 text-sm flex flex-row items-center md:justify-between md:gap-x-4 px-3"
                 >
                     <p>
                         &copy; Ishan Joshi {new Date().getFullYear()}
