@@ -130,6 +130,36 @@ The problem was that the daemon was running in root space with the root user's e
 that was stored in the user space.
 So, just for the config file location, the daemon now requests the server for the env and then uses `su` to read the config file.
 
+6. **Channel Based Communication**: [refer](https://github.com/newtoallofthis123/swhkd/commit/c2655a403f79fbe10f5b15dcf08666e1e6e13b2a):
+The daemon now uses a channel based communication to communicate with the thread.
+The thread is spawned at the beginning and is valid throughout the lifetime of the daemon.
+A mpsc channel of a good default of `100` is used to communicate between the daemon and the thread.
+This means that the daemon can now execute the commands in the user space without spawning a new thread everytime.
+
+7. **Server Instance Tracking:** [refer](https://github.com/newtoallofthis123/swhkd/commit/0d360dc9c51a3d61a951f3f623cd8e2a61e7ac7d):
+The server now detects if it is already running and if it is, it doesn't start a new instance.
+This is usefull because it has been daemonized and hence can be running in the background when a new connection is made.
+
+## CVE's
+
+The following CVE's were raised against the project:
+CVE-2022-27815, CVE-2022-27814, CVE-2022-27819, CVE-2022-27818, CVE-2022-27817, CVE-2022-27816
+
+The other CVE's were fixed in the previous patches and my code doesn't really change much about them.
+However, the one I do want to address is the CVE-2022-27816, which reads as follows:
+
+```text
+The Unprivileged Server Process Receives Commands via /tmp/swhkd.sock
+```
+
+This is effectively mitigated by the new approach that we have taken. 
+This is because the server now doesn't react in any way to the commands it recieves on the socket.
+The server merely acts as a beacon for the environment variables.
+This means that regardless of any command that is sent to the server, it only outputs the environment variables and nothing else.
+Now it also doesn't matter is a malicious user sends a command to the server, since the server is not executing any commands, it 
+is not vulnerable to any command injection attacks.
+It is merely a source of the environment variables.
+
 ## Final Flow
 
 The final flow of the daemon is as follows:
@@ -153,6 +183,7 @@ This information is stored in the `env` struct instance and this is exchanged an
 The `XDG_CONFIG_HOME` is also set to `~/.config/swhkd` and the config file is read from there if it exists.
 A thread is spawned that is valid throughout the lifetime of the daemon.
 The thread is also de-escalated to the user space.
+The thread can communicate with the daemon through a channel.
 
 Next, the daemon starts listening for the key events.
 When a key event is detected, the daemon just sends it to the thread through the channel.

@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/base.astro';
+import Char from '../../spans/char.astro';
+import { marked } from 'marked';
+
+const {slug} = Astro.params;
+
+import { connectToDatabase, type Database } from '../../utils/db';
+
+const { db }: { db: Database } = await connectToDatabase();
+const data = await db.collection('page').findOne({hash: slug});
+if(data == null)
+    return Astro.redirect('/404')
+
+const content = marked.parse(data.content)
+---
+
+<Base title={data.name} emoji={data.name[0]}>
+    <h1 class="text-2xl pb-2">
+        <Char char={data.name[0]} /> {data.name}
+    </h1>
+    <p class="pb-3 dark:text-rosePine-subtle text-rosePineDawn-subtle">
+        {new Date(data.date).toString()}
+    </p>
+    <div set:html={content}>
+    </div>
+</Base>
