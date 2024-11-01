@@ -26,11 +26,6 @@ interface CachedConnection {
     promise: Promise<void> | null;
 }
 
-interface MongoOptions extends MongoClientOptions {
-    useNewUrlParser?: boolean;
-    useUnifiedTopology?: boolean;
-}
-
 declare const global: typeof globalThis & {
     mongo: CachedConnection;
 };
@@ -48,11 +43,7 @@ export async function connectToDatabase(): Promise<{ db: Db }> {
             client: null!,
             db: null!,
         };
-        const opts: MongoOptions = {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        };
-        cached.promise = MongoClient.connect(MONGODB_URL, opts)
+        cached.promise = MongoClient.connect(MONGODB_URL, {})
             .then((client) => {
                 conn.client = client;
                 return client.db('updates');

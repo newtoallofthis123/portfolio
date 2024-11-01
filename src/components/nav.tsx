@@ -5,9 +5,6 @@ type Props = {
 };
 
 export default function Nav({ title, emoji, color }: Props) {
-    // let options = ["gold", "foam"];
-    // let ranChoice = options[Math.floor(Math.random() * options.length)];
-
     return (
         <nav className="flex md:flex-row flex-col justify-between items-center md:p-2 md:border-2 border-b-2 border-rosePineDawn-text dark:border-neutral-200 md:my-4">
             <div className="my-0 py-1 bg-rosePine-foam text-rosePine-overlay md:block md:w-fit w-full flex items-center">
@@ -24,9 +21,9 @@ export default function Nav({ title, emoji, color }: Props) {
                     <a
                         href={`/${item[0]}`}
                         key={index}
-                        className="mx-2 text-black hover:bg-rosePine-gold hover:text-black  md:p-1 md:px-2 p-0.5"
+                        className="mx-2 text-black hover:bg-rosePine-gold hover:text-black dark:text-white dark:hover:text-black md:p-1 md:px-2 p-0.5"
                     >
-                                {item[1]}{item[0]}
+                        {item[1]}{item[0]}
                     </a>
                 ))}
             </div>
