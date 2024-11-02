@@ -3,19 +3,26 @@
 @tailwind utilities;
 
 ::selection {
-  background: #e0def4;
-  color: #232136;
+    background: #e0def4;
+    color: #232136;
 }
 
 body {
-  line-height: 1.7;
+    line-height: 1.7;
 }
 
 #inline-icon {
-  display: inline-block;
-  width: 1.2rem;
-  height: 1.2rem;
-  vertical-align: middle;
-  fill: currentColor;
+    display: inline-block;
+    width: 1.2rem;
+    height: 1.2rem;
+    vertical-align: middle;
+    fill: currentColor;
 }
 
+@font-face {
+    font-family: 'GeistMono';
+    src: url('/fonts/GeistMono[wght].woff2') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
