@@ -110,12 +110,12 @@ table .math svg {
 }
 
 .article ul {
-    padding: 0 1.2rem;
+    padding: 0 2rem;
     list-style: initial;
 }
 
 .article ol {
-    padding: 0 1.2rem;
+    padding: 0 2rem;
     list-style: decimal;
 }
 

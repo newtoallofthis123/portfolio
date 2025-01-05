@@ -1,0 +1,152 @@
+---
+title: Awesome Fish functions
+date: 2025-01-03
+author: Ishan
+emoji: <><
+layout: "../../layouts/blog_post.astro"
+description: Some awesome fish functions that I have accumalated over the years.
+tags: ["fish", "cli", "terminal"]
+---
+
+I use fish shell as my default shell and I have recently started writing and accumulating some fish shell functions that you might like
+for your own config.
+
+So here are some of them:
+
+## Automagical Tmux Session
+
+```fish
+function tm
+    set session_name (basename (pwd))
+
+    if tmux has-session -t $session_name
+        echo "Tmux session '$session_name' already exists."
+        tmux attach-session -t $session_name
+    else
+        tmux new-session -s $session_name
+    end
+end
+```
+
+Needs: `tmux`, Running: `tm`
+
+When run in a dir, it magically opens a new tmux session with the directory name as the session name or attaches to a current tmux session with the directory name.
+Very useful, especially in cases when a session manager is an overkill
+
+## Automagical Zellij
+
+I know a lot of people are shifting to zellij, so here is something similar for zellij.
+
+```fish
+function zln
+    set session_name (basename (pwd))
+
+    set session_exists (zellij list-sessions | grep -w $session_name)
+
+    if test -z "$session_exists"
+        echo "Session '$session_name' does not exist. Creating a new session..."
+        zellij attach --create $session_name
+    else
+        zellij attach $session_name
+    end
+end
+```
+
+Needs: `zellij`, Running: `zln`
+
+## Classic Tmux Sessionizer
+
+```fish
+function tz
+    set session $(tmux list-sessions | cut -d ':' -f 1 | fzf)
+    if test -n "$session"
+        tmux attach-session -t $session
+    else
+        echo "No session selected"
+    end
+end
+```
+
+Well you probably don't need a whole base script just for some simple fzf and cut.
+
+Needs: `fzf,tmux`, Running: `tz`
+
+## Fuzzy Nvim Open
+
+```fish
+function nz
+    set -l dir $argv[1]
+    if test -z "$dir"
+    else
+        z $dir
+    end
+    set file $(fzf)
+    if test -n "$file"
+        nvim $file
+    else if test -n "$dir"
+        cd $dir
+    else
+        echo "No file selected"
+    end
+end
+```
+
+Uses zoxide to enter a dir before opening fzf to select a file to open in nvim
+Saves me a lot of time for quick edits.
+Also works if no dir is specified by opening it in the pwd.
+
+Needs: `zoxide,fzf,nvim`, Running: `nz [z_dir]`
+
+## Replace File Managers
+
+```fish
+function zz
+    set -l dir $argv[1]
+    if test -z "$dir"
+    else
+        z $dir
+    end
+    set file $(fzf)
+    if test -n "$file"
+        xdg-open $file
+    else if test -n "$dir"
+        cd $dir
+    else
+        echo "No file selected"
+    end
+end
+```
+
+Uses zoxide to change directories similar to nz, but opens using xdg-open instead of nvim
+
+Needs: `fzf,zoxide`, Running: `zz [dir]`
+
+## Flexible Cat
+
+```fish
+function cat
+    if string match -q "*.md" $argv
+        glow $argv
+    else if file --mime $argv | grep -q "application"
+        xxd $argv
+    else if file --mime $argv | grep "png"
+        wezterm imgcat $argv
+    else if test -d $argv
+        exa --icons -l $argv
+    else
+        batcat --style=plain --theme ansi $argv
+    end
+end
+```
+
+Okay so this is kinda cursed, but this rebinds cat to use different programs for different file types.
+You can change this to your liking and add more programs.
+
+Needs: `glow,xxd,wezterm,exa,batcat`, Running: `cat [OPTIONS] [FILES...]`
+
+---
+
+Those are all I have for now, but let me know if you need more such cursed functions.
+Also checkout my YouTube video I made showcasing these:
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/AG9TNapzhFc?si=FD9DTIraHxhMOCy0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
