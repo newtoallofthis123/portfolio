@@ -7,12 +7,12 @@ type Props = {
 export default function Nav({ title, emoji, color }: Props) {
     return (
         <nav className="flex md:flex-row flex-col justify-between items-center md:p-2 md:border-2 border-b-2 border-rosePineDawn-text dark:border-neutral-200 md:my-4">
-            <div className="my-0 py-1 bg-rosePine-foam text-rosePine-overlay md:block md:w-fit w-full flex items-center">
+            <div className="py-2 px-3 bg-rosePine-foam text-rosePine-overlay md:block md:w-fit w-full flex items-center">
                 <a
                     href="/"
-                    className={`p-1 text-xl  font-bold w-full text-center`}
+                    className={`text-xl font-bold flex gap-2 mx-auto`}
                 >
-                    <span className="px-3">{emoji ?? "*"}</span>
+                    <span>{emoji ?? "*"}</span>
                     {title ?? "NoobScience"}
                 </a>
             </div>
@@ -21,7 +21,7 @@ export default function Nav({ title, emoji, color }: Props) {
                     <a
                         href={`/${item[0]}`}
                         key={index}
-                        className="mx-2 text-black hover:bg-rosePine-gold hover:text-black dark:text-white dark:hover:text-black md:p-1 md:px-2 p-0.5"
+                        className="mx-2 text-black hover:bg-rosePine-gold dark:text-white dark:hover:text-black md:p-1 md:px-2 p-0.5 inline-block"
                     >
                         {item[1]}{item[0]}
                     </a>
