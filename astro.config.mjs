@@ -1,16 +1,16 @@
-import { defineConfig } from 'astro/config';
-import vercel from '@astrojs/vercel/serverless';
-import react from '@astrojs/react';
-import tailwind from '@astrojs/tailwind';
-import sitemap from '@astrojs/sitemap';
+import { defineConfig } from "astro/config";
+import vercel from "@astrojs/vercel/serverless";
+import react from "@astrojs/react";
+import tailwind from "@astrojs/tailwind";
+import sitemap from "@astrojs/sitemap";
 
-import mdx from '@astrojs/mdx';
+import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
-  output: 'server',
+  output: "server",
   prefetch: true,
-  site: 'https://www.noobscience.in',
+  site: "https://www.noobscience.in",
   adapter: vercel({
     webAnalytics: { enabled: true },
   }),
@@ -18,35 +18,35 @@ export default defineConfig({
   markdown: {
     gfm: true,
     shikiConfig: {
-      theme: 'rose-pine',
+      theme: "min-dark",
       langs: [
-        'javascript',
-        'html',
-        'php',
-        'css',
-        'typescript',
-        'tsx',
-        'jsx',
-        'json',
-        'markdown',
-        'mdx',
-        'bash',
-        'shell',
-        'rust',
-        'c',
-        'cpp',
-        'go',
-        'java',
-        'python',
-        'ruby',
+        "javascript",
+        "html",
+        "php",
+        "css",
+        "typescript",
+        "tsx",
+        "jsx",
+        "json",
+        "markdown",
+        "mdx",
+        "bash",
+        "shell",
+        "rust",
+        "c",
+        "cpp",
+        "go",
+        "java",
+        "python",
+        "ruby",
       ],
       wrap: false,
     },
-    syntaxHighlight: 'shiki',
+    syntaxHighlight: "shiki",
   },
   redirects: {
-    '/resume': '/resume_v_5.pdf',
-    '/ml': '/ml/logs',
-    '/gsoc': '/gsoc/logs'
+    "/resume": "/Ishan_Joshi_Resume_1.pdf",
+    "/ml": "/ml/logs",
+    "/gsoc": "/gsoc/logs",
   },
 });
