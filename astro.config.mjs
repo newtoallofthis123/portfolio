@@ -45,7 +45,7 @@ export default defineConfig({
     syntaxHighlight: "shiki",
   },
   redirects: {
-    "/resume": "/Ishan_Joshi_Resume_1.pdf",
+    "/resume": "/Ishan_Joshi_Resume_2.pdf",
     "/ml": "/ml/logs",
     "/gsoc": "/gsoc/logs",
   },
