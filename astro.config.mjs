@@ -1,5 +1,5 @@
 import { defineConfig } from "astro/config";
-import vercel from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/vercel";
 import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
@@ -18,7 +18,7 @@ export default defineConfig({
   markdown: {
     gfm: true,
     shikiConfig: {
-      theme: "min-dark",
+      theme: "dark-plus",
       langs: [
         "javascript",
         "html",
