@@ -1,0 +1,145 @@
+---
+title: Simple Web Augmented Generation
+date: 2025-03-10
+description: A guide to building a simple web application using augmented generation.
+layout: "../../layouts/blog_post.astro"
+tags: ["web", "llm", "python"]
+---
+
+I see a lot of projects using [Travily](https://tavily.com/) which is paid to integrate well, a web search
+to augment the LLM response.
+While this is a pretty great way to integrate web search into your llm application, most times, it is kinda
+overkill. Why use something well made when you can make a wonky version on your own? (Sarcastic)
+
+Well this is mostly just a tutorial of how to go about doing something like this, but if you are building a production application,
+you should consider using a more robust solution like [Travily](https://tavily.com/).
+Our version does a pretty simple web search and scrapping which may or may not be enough for your needs.
+It's a good starting point though and you will be pretty surprised how good LLM's are at
+responding correctly even with the smallest of context.
+
+## 1. Duckduckgo Search
+
+[DDG](https://pypi.org/project/duckduckgo-search/) is a simple python library wrapper built for
+duckduckgo search.
+It is an unoffical scraper based api for duckduckgo search.
+This however is sufficient for our needs.
+We first setup a simple web scraper using [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) and [Requests](https://docs.python-requests.org/en/master/).
+We then use DDG to query the search results and extract the relevant information.
+
+We need not care *too much* about what we are actually scraping from the website, as long as we have something.
+The context would later be filtered out using an embedding model.
+So we write some simple regex and tag filtering to extract information of a particular site.
+
+```python
+class Scraper:
+    def __init__(self):
+        self.ddgs = DDGS()
+
+    def get_urls(self, query, max_results=2):
+        return self.ddgs.text(query, max_results=max_results)
+
+    def _get_html(self, url):
+        return requests.get(url).text
+
+    def extract_text(self, site):
+        html = self._get_html(site["href"])
+        soup = bs4.BeautifulSoup(html, "html.parser")
+        for element in soup.find_all(["script", "style", "header", "footer", "nav"]):
+            element.decompose()
+        priority_tags = ["article", "main", 'div[role="main"]', ".content", "#content"]
+        for selector in priority_tags:
+            content = soup.select(selector)
+            if content:
+                text = " ".join(tag.get_text(separator=" ", strip=True) for tag in content)
+                return re.sub(r"\s+", " ", text)
+        text = body.get_text(separator=" ", strip=True)
+        text = re.sub(r"\s+", " ", text)
+        return text
+```
+
+We also make sure to remove all the script tags and style tags from the HTML so as to not waste
+compute time making embeddings for them.
+
+Now that we have a very simple scraper, we next need to generate embeddings for the extracted text and
+store it in the database
+
+## 2. PGVector
+
+PGVector is a PostgreSQL extension that allows you to store and query vector data efficiently.
+It provides a set of functions and operators for working with vector data,
+including similarity search and distance calculations.
+
+We will be using PGVector with langchain to store embeddings in the database and perform similarity search on them.
+
+```python
+from langchain_postgres import PGVector
+
+store = PGVector(
+embeddings=self.embeddings,
+connection=_make_sqlalchemy_uri(),
+collection_name="webrag",
+)
+```
+
+We will now also write a `add_embeddings` and `search_embeddings` function to add and search embeddings in the database.
+
+```python
+def _add_embeddings(text, url):
+    doc = Document(page_content=text, metadata={"source": url})
+    docs = RecursiveCharacterTextSplitter(chunk_size=2000).split_documents([doc])
+    return store.add_documents(docs)
+
+def _search_embeddings(query):
+    query = embeddings.embed_query(query)
+    return store.similarity_search_with_score_by_vector(query, 5)
+```
+
+In this code, we essentially create langchain documents from the extracted text,
+use a character-based tokenizer to split the text into chunks,
+and then add the embeddings to the database.
+The search embeddings function takes a query string and returns the top 5 most similar documents from the database.
+
+We can now combine all of this into a generalized search function that takes a query string and returns the top 5 most similar documents from the database or queries
+them from the web.
+
+```python
+def search(query, refresh=False):
+    exisiting = _search_embeddings(query)
+    if len(exisiting) > 0 and not refresh:
+        return exisiting
+
+    urls = scraper.get_urls(query)
+    for url in urls:
+        text = scraper.extract_text(url)
+        if text:
+            embeddings = _add_embeddings(text, url["href"])
+
+    return _search_embeddings(query)
+```
+
+We now get valid data from the web and store it in the database.
+This can be improved by adding another table that keeps track of url's that have already been visited and
+skips them if they have already been visited.
+
+We can now send this as context to a llm to get accurate results.
+
+```python
+question = "Current prime minister of India"
+context = search(question)
+
+context_res = ""
+for r in context:
+    print("Using source:", r[0].metadata["source"], " with confidence:", r[1])
+    context_res += "\n\n" + r[0].page_content
+
+llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", google_api_key=GOOGLE_API_KEY)
+
+prompt_text = prompt.invoke({"context": context_res, "question": question})
+res = llm.invoke(prompt_text)
+print(res)
+```
+
+We now get accurate results from the llm.
+A well structured classes based code for the above tutorial is available at [newtoallofthis123/web_rag](https://github.com/newtoallofthis123/web_rag)
+
+Hope you enjoyed this tutorial!
