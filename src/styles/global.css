@@ -23,6 +23,12 @@ html.dark {
   color: #ffffff;
 }
 
+html.dark .astro-code,
+html.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
 #inline-icon {
   display: inline-block;
   width: 1.2rem;
