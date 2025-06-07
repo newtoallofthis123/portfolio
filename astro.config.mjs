@@ -18,7 +18,10 @@ export default defineConfig({
   markdown: {
     gfm: true,
     shikiConfig: {
-      theme: "light-plus",
+      themes: {
+        light: "light-plus",
+        dark: "dark-plus",
+      },
       langs: [
         "javascript",
         "html",

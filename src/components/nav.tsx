@@ -17,7 +17,11 @@ export default function Nav({ title, emoji, color }: Props) {
           ) : (
             <div className="flex flex-row gap-x-2">
               <div>
-                <img src={"/favicon.ico"} alt="favicon" className="w-6 h-6 mt-0.5" />
+                <img
+                  src={"/favicon.ico"}
+                  alt="favicon"
+                  className="w-6 h-6 mt-0.5"
+                />
               </div>
               <div>NoobScience</div>
             </div>
@@ -35,7 +39,7 @@ export default function Nav({ title, emoji, color }: Props) {
           <a
             href={`/${item[0]}`}
             key={index}
-            className="mx-2 md:p-1 md:px-2 p-0.5 inline-block hover:bg-yellow-300 rounded-[5px] "
+            className="mx-2 md:p-1 md:px-2 p-0.5 inline-block hover:bg-yellow-300 hover:text-black rounded-[5px] "
           >
             {item[1]}
             {item[0]}

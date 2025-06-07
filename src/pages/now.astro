@@ -1,27 +1,28 @@
 ---
-import { marked } from 'marked';
-import Base from '../layouts/base.astro';
-import Char from '../spans/char.astro'
+import { marked } from "marked";
+import Base from "../layouts/base.astro";
+import Char from "../spans/char.astro";
 
-import { connectToDatabase, type Database } from '../utils/db';
+import { connectToDatabase, type Database } from "../utils/db";
 
 const { db }: { db: Database } = await connectToDatabase();
-const data = await db.collection('specials').find().toArray();
-if(data == null)
-    return Astro.redirect('/404')
+const data = await db.collection("specials").find().toArray();
+if (data == null) return Astro.redirect("/404");
 const now = data[0];
 const markdown = marked.parse(now.current);
 ---
 
 <Base title="Now! | NoobScience">
-    <h1 class="text-2xl font-bold pb-4 pt-2"><Char char='$' /> git pull noob@latest</h1>
-    <div>
-        <h3 class="text-lg font-bold">{now.title}</h3>
-        <article set:html={markdown}></article>
-    </div>
-    <style is:inline>
-    article p{
-        margin: 0.875rem 0;
-        }
-    </style>
+  <h1 class="text-2xl font-bold pb-4 pt-2">
+    <Char char="$" /> git pull noob@latest
+  </h1>
+  <div>
+    <h3 class="text-lg font-bold">{now.title}</h3>
+    <article set:html={markdown} />
+  </div>
+  <style is:inline>
+    article p {
+      margin: 0.875rem 0;
+    }
+  </style>
 </Base>

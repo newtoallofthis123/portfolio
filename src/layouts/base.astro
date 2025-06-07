@@ -18,7 +18,14 @@ import { Font } from "astro:assets";
 
 import "../styles/global.css";
 import "../styles/article.css";
-import { siGithub, siGmail, siLinkedin, siRss, siX, siYoutube } from "simple-icons";
+import {
+  siGithub,
+  siGmail,
+  siLinkedin,
+  siRss,
+  siX,
+  siYoutube,
+} from "simple-icons";
 import { ClientRouter } from "astro:transitions";
 import { ToolTip } from "@/components/ToolTip";
 const BASE_URL = "http://" + Astro.url.host;
@@ -100,11 +107,11 @@ const BASE_URL = "http://" + Astro.url.host;
           <p>
             &copy; Ishan Joshi {new Date().getFullYear()}
           </p>
-          <!-- <p class="pl-3">
+          <p class="pl-3">
             (
             <span id="theme" class="cursor-pointer">Theme Toggle</span>
             )
-          </p> -->
+          </p>
           <div class="pl-3 flex flex-row gap-x-4">
             <a href="/rss.xml">
               <span set:html={siRss.svg} id="inline-icon" />
@@ -128,12 +135,25 @@ const BASE_URL = "http://" + Astro.url.host;
         </footer>
       </div>
     </main>
-    <script is:inline>
-      const prefersDarkScheme = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      );
-      let theme = "";
-      const themeElement = document.getElementById("theme");
-    </script>
   </body>
+  <script is:inline>
+    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+    let theme = prefersDarkScheme.matches ? "dark" : "light";
+    let localTheme = localStorage.getItem("theme");
+    if (localTheme) {
+      theme = localTheme;
+    }
+    console.log(theme);
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    const themeElement = document.getElementById("theme");
+    themeElement.addEventListener("click", () => {
+      theme = theme === "dark" ? "light" : "dark";
+      document.documentElement.classList.toggle("dark", theme === "dark");
+      localStorage.setItem("theme", theme);
+      window.location.reload();
+    });
+    document.addEventListener("astro:after-swap", () => {
+      document.documentElement.classList.toggle("dark", theme === "dark");
+    });
+  </script>
 </html>

@@ -1,16 +1,10 @@
 ---
-const {src} = Astro.props;
+const { src } = Astro.props;
 ---
 
-<div class='p-2 py-5'>
-    <video
-        autoplay
-        loop
-        muted
-    class=" rounded-md"
-    src={src}
-    ></video>
-    <div class="text-rosePine-subtle text-center">
+<div class="p-2 py-5">
+  <video autoplay loop muted class="rounded-md" src={src}></video>
+  <div class="text-rosePine-subtle text-center">
     <slot />
-    </div>
+  </div>
 </div>

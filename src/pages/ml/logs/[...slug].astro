@@ -1,11 +1,11 @@
 ---
-import {getEntry} from 'astro:content'
-import Base from '../../../layouts/base.astro';
-import { siGithub } from 'simple-icons';
+import { getEntry } from "astro:content";
+import Base from "../../../layouts/base.astro";
+import { siGithub } from "simple-icons";
 
-const {slug} = Astro.params;
+const { slug } = Astro.params;
 
-const post = await getEntry('ml_log', slug as string)
+const post = await getEntry("ml_log", slug as string);
 
 // @ts-ignore
 const { Content } = await post?.render();
@@ -14,27 +14,27 @@ const meta = post?.data;
 ---
 
 <Base title={meta?.title} emoji="=">
-    <div class="md:px-2">
-        <div class="flex flex-row items-end gap-x-3">
-        <h1 class="md:text-4xl text-3xl font-black">
-            {meta?.title}
-        </h1>
-        </div>
-        <div class="border-2 dark:border-rosePine-subtle border-rosePineDawn-subtle p-2 my-4 text-rosePineDawn-subtle dark:text-rosePine-subtle">
-            <p class="mt-1 text-md ">
-                Tags: {meta?.tags ? meta?.tags.join(','): ''}
-            </p>
-            <p class="mt-0.5 text-md">
-            On: {
-                meta?.date ? new Date(meta.date).toDateString() : null
-            }
-            </p>
-            <p class="mt-0.5 text-md">
-                Summary: { meta?.summary }
-            </p>
-        </div>
+  <div class="md:px-2">
+    <div class="flex flex-row items-end gap-x-3">
+      <h1 class="md:text-4xl text-3xl font-black">
+        {meta?.title}
+      </h1>
     </div>
-    <div class="md:px-2">
-        <Content />
+    <div
+      class="border-2 dark:border-rosePine-subtle border-rosePineDawn-subtle p-2 my-4 text-rosePineDawn-subtle dark:text-rosePine-subtle"
+    >
+      <p class="mt-1 text-md">
+        Tags: {meta?.tags ? meta?.tags.join(",") : ""}
+      </p>
+      <p class="mt-0.5 text-md">
+        On: {meta?.date ? new Date(meta.date).toDateString() : null}
+      </p>
+      <p class="mt-0.5 text-md">
+        Summary: {meta?.summary}
+      </p>
     </div>
+  </div>
+  <div class="md:px-2">
+    <Content />
+  </div>
 </Base>

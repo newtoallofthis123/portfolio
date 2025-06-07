@@ -1,9 +1,9 @@
 ---
-export interface Props{
-    char?: string
+export interface Props {
+  char?: string;
 }
 
-const {char} = Astro.props
+const { char } = Astro.props;
 ---
 
-<span class="text-neutral-800 pr-1">{char ?? '>'}</span>
+<span class="text-neutral-800 dark:text-white pr-1">{char ?? ">"}</span>

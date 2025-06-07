@@ -1,4 +1,4 @@
-.article > p {
+.article>p {
     font-size: 1rem;
     font-weight: 400;
     padding: 0.5rem 0;
@@ -16,7 +16,7 @@
     text-decoration: underline;
 }
 
-.article > h1 {
+.article>h1 {
     font-size: 2.6rem;
     line-height: 3;
 }

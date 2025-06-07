@@ -1,56 +1,54 @@
 ---
-import Base from '../../layouts/base.astro';
-import Char from '../../spans/char.astro';
-import Highlight from '../../spans/highlight.astro';
-import Link from '../../spans/link.astro';
-import { getCollection } from 'astro:content';
+import Base from "../../layouts/base.astro";
+import Char from "../../spans/char.astro";
+import Highlight from "../../spans/highlight.astro";
+import Link from "../../spans/link.astro";
+import { getCollection } from "astro:content";
 
-let posts = await getCollection('blog');
+let posts = await getCollection("blog");
 posts = posts.filter((post) => !post.data.draft);
 posts = posts.sort(
-    (a: any, b: any) =>
-        new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+  (a: any, b: any) =>
+    new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
 ---
 
-<Base title='NoobLog'>
+<Base title="NoobLog">
+  <div>
+    <h1 class="text-2xl font-bold pt-2 pb-4 font-geist-mono">
+      <Char /> my_blog();
+    </h1>
     <div>
-        <h1 class="text-2xl font-bold pt-2 pb-4 font-geist-mono">
-            <Char /> my_blog();
-        </h1>
-        <div>
-            <p class="pb-2">
-                Welcome to <Highlight>Ishan Writes</Highlight>.
-            </p>
-            <p class="leading-7">
-                This is my place on the <i class="bi bi-globe"></i> internet where I write about things that
-                I find interesting. Sometimes funny, sometimes serious, but
-                always interesting (At least I hope so). So, grab a cup of <i class="bi bi-cup"></i> coffee
-                and enjoy the read.
-            </p>
-            <p class="text-rosePineDawn-subtle dark:text-rosePine-subtle mt-2">
-                PS: You can use the power of <Link href="/rss.xml">RSS</Link>
-                here.
-            </p>
+      <p class="pb-2">
+        Welcome to <Highlight>Ishan Writes</Highlight>.
+      </p>
+      <p class="leading-7">
+        This is my place on the <i class="bi bi-globe"></i> internet where I write
+        about things that I find interesting. Sometimes funny, sometimes serious,
+        but always interesting (At least I hope so). So, grab a cup of <i
+          class="bi bi-cup"></i> coffee and enjoy the read.
+      </p>
+      <p class="text-rosePineDawn-subtle dark:text-rosePine-subtle mt-2">
+        PS: You can use the power of <Link href="/rss.xml">RSS</Link>
+        here.
+      </p>
+    </div>
+  </div>
+  <h2 class="py-4 text-xl font-bold font-geist-mono">
+    <Char char="~" /> posts.sorted();
+  </h2>
+  <div class="md:w-2/3 md:p-0 pr-2">
+    {
+      posts.map((post) => (
+        <div class="pb-2 flex flex-row items-baseline justify-between gap-x-4">
+          <h2>
+            <Link href={`/blog/${post.slug}`}>{post.data.title}</Link>
+          </h2>
+          <p class="text-rosePineDawn-subtle dark:text-rosePine-subtle">
+            {new Date(post.data.date).toLocaleDateString()}
+          </p>
         </div>
-    </div>
-    <h2 class="py-4 text-xl font-bold font-geist-mono">
-        <Char char="~" /> posts.sorted();
-    </h2>
-    <div class="md:w-2/3 md:p-0 pr-2">
-        {
-            posts.map((post) => (
-                <div class="pb-2 flex flex-row items-baseline justify-between gap-x-4">
-                    <h2>
-                        <Link href={`/blog/${post.slug}`}>
-                            {post.data.title}
-                        </Link>
-                    </h2>
-                    <p class="text-rosePineDawn-subtle dark:text-rosePine-subtle">
-                        {new Date(post.data.date).toLocaleDateString()}
-                    </p>
-                </div>
-            ))
-        }
-    </div>
+      ))
+    }
+  </div>
 </Base>

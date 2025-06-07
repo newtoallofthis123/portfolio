@@ -8,7 +8,7 @@ export async function GET(context) {
   let posts = await getCollection("blog");
   posts = posts.filter((post) => !post.data.draft);
   posts = posts.sort(
-    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+    (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
   );
   return rss({
     // `<title>` field in output xml

@@ -1,11 +1,14 @@
 ---
-const {href} = Astro.props;
+const { href } = Astro.props;
 ---
 
-<a class="underline decoration-dotted hover:bg-white hover:text-black p-0.5 hover:no-underline" href={href}><slot /></a>
+<a
+  class="underline decoration-dotted hover:bg-white hover:text-black p-0.5 hover:no-underline"
+  href={href}><slot /></a
+>
 <style>
-    a:hover{
-        background: #e0def4;
-        color: #232136;
-    }
+  a:hover {
+    background: #e0def4;
+    color: #232136;
+  }
 </style>

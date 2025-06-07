@@ -1,11 +1,11 @@
 ---
-import {getEntry} from 'astro:content'
-import Base from '../../layouts/base.astro';
-import { Image } from 'astro:assets';
+import { getEntry } from "astro:content";
+import Base from "../../layouts/base.astro";
+import { Image } from "astro:assets";
 
-const {slug} = Astro.params;
+const { slug } = Astro.params;
 
-const post = await getEntry('blog', slug as string)
+const post = await getEntry("blog", slug as string);
 
 // @ts-ignore
 const { Content } = await post?.render();
@@ -14,33 +14,27 @@ const meta = post?.data;
 ---
 
 <Base title={meta?.title} emoji={meta?.emoji} color={meta?.color}>
-    <div class="md:px-2">
-        <h1 class="md:text-4xl text-3xl font-black">
-            {meta?.title}
-        </h1>
-        <p class="mt-2">
-            {meta?.description}
-        </p>
-        <p class="mt-2 text-md dark:text-rosePine-subtle text-rosePineDawn-subtle">
-            Posted on {
-                meta?.date ? new Date(meta.date).toDateString() : null
-            }
-        </p>
-        <div>
-            {
-                meta?.img && (
-                    <div class={`p-2 py-5`}>
-                        <Image
-                            class=" rounded-md"
-                            src={meta.img}
-                            alt={meta?.title}
-                        />
-                    </div>
-                )
-            }
-        </div>
+  <div class="md:px-2">
+    <h1 class="md:text-4xl text-3xl font-black">
+      {meta?.title}
+    </h1>
+    <p class="mt-2">
+      {meta?.description}
+    </p>
+    <p class="mt-2 text-md dark:text-rosePine-subtle text-rosePineDawn-subtle">
+      Posted on {meta?.date ? new Date(meta.date).toDateString() : null}
+    </p>
+    <div>
+      {
+        meta?.img && (
+          <div class={`p-2 py-5`}>
+            <Image class=" rounded-md" src={meta.img} alt={meta?.title} />
+          </div>
+        )
+      }
     </div>
-    <div class="md:px-2 py-1">
-        <Content />
-    </div>
+  </div>
+  <div class="md:px-2 py-1">
+    <Content />
+  </div>
 </Base>
