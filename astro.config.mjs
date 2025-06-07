@@ -1,4 +1,4 @@
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 import vercel from "@astrojs/vercel";
 import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
@@ -18,7 +18,7 @@ export default defineConfig({
   markdown: {
     gfm: true,
     shikiConfig: {
-      theme: "dark-plus",
+      theme: "light-plus",
       langs: [
         "javascript",
         "html",
@@ -48,5 +48,19 @@ export default defineConfig({
     "/resume": "/Ishan_Joshi_Resume_2.pdf",
     "/ml": "/ml/logs",
     "/gsoc": "/gsoc/logs",
+  },
+  experimental: {
+    fonts: [
+      {
+        provider: fontProviders.google(),
+        name: "Geist",
+        cssVariable: "--font-geist",
+      },
+      {
+        provider: fontProviders.google(),
+        name: "Geist Mono",
+        cssVariable: "--font-geist-mono",
+      },
+    ],
   },
 });

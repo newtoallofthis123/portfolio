@@ -1,11 +1,12 @@
 ---
-import { siGo, siLinux, siRust } from 'simple-icons';
+import { siFramer, siGithub, siGo, siLinux, siNeovim, siRust, siStudyverse } from 'simple-icons';
 import Base from '../layouts/base.astro';
 import Bold from '../spans/bold.astro';
 import HightLight from '../spans/highlight.astro';
 import Link from '../spans/link.astro';
 import { getCollection } from 'astro:content';
 import Char from '../spans/char.astro';
+import Invideo from '../assets/invideo.svg';
 
 let posts = await getCollection('blog');
 posts = posts.filter((post) => !post.data.draft);
@@ -21,33 +22,30 @@ posts = posts.sort(
     </h1>
     <div id="banner" class="my-2 text-dark dark:text-white">
         <pre class="text-mx sm:text-base">
-	<span class="dark:text-rosePine-foam text-rosePineDawn-foam">____</span>     <span class="dark:text-rosePine-foam text-rosePineDawn-foam">__                       __           __    _</span> 
-   <span class="dark:text-rosePine-gold text-rosePineDawn-gold">/  _/____/ /_  ____</span><span class="dark:text-rosePine-love text-rosePineDawn-love"> _____         / /___  _____/ /_  (_)</span>
-   / //<span class="dark:text-rosePine-iris text-rosePineDawn-iris"> ___/ __ \/ __</span> `/ __ <span class="dark:text-rosePine-gold text-rosePineDawn-gold">\   __  / / __ \/ ___/ __ \/ / </span>
- _/ /(__  <span class="text-rosePine-pine">) / / / /_/ / / / /  / /_/ </span><span class="dark:text-rosePine-rose text-rosePineDawn-rose">/ /_/ (__  ) / / / /</span>
-<span class="dark:text-rosePine-love text-rosePineDawn-love">/___/____/_/ /_/\_</span>_,_/_/ /_/   \<span class="dark:text-rosePine-iris text-rosePineDawn-iris">____/\____/____/_/ /_/_/</span>
+	<span>____</span>     <span>__                       __           __    _</span> 
+   <span>/  _/____/ /_  ____</span><span> _____         / /___  _____/ /_  (_)</span>
+   / //<span> ___/ __ \/ __</span> `/ __ <span>\   __  / / __ \/ ___/ __ \/ / </span>
+ _/ /(__  <span> ) / / / /_/ / / / /  / /_/ </span><span>/ /_/ (__  ) / / / /</span>
+<span>/___/____/_/ /_/\_</span>_,_/_/ /_/   \<span>____/\____/____/_/ /_/_/</span>
 		</pre>
     </div>
     <p>
-        I am a <HightLight>
-            <span id="inline-icon" set:html={siGo.svg} /> Backend Developer
-        </HightLight> and <span id="inline-icon" set:html={siLinux.svg} />
-         Linux Enthusiast based in India.
+        I am a 🎓 Student and an Engineer at <span id="inline-icon">
+           <Invideo /> 
+        </span> Invideo based in India.
     </p>
     <div class="mt-2">
         <p class="leading-7">
-            Over the past 3 years, I have dedicated my time and whatever
-            attention span I have to learn and understand the world of Software
-            Development. I am currently working on the <span
-                id="inline-icon"
-                set:html={siRust.svg}
-            /> Rust Programming Language. Solving advent of code '23 and writing
-            some really cool CLI tools, I think I can call myself a Rustacean
-            now.
+            A polyglot generalist who loves to learn and build, I've been dabbling
+            in multiple languages and frameworks in my 4 years of programming.
+            I love customizable and intuitive tools and love to build them <span id="inline-icon" set:html={siGithub.svg} />.
+            CLI's are my favorite way to interact with computers, and I love building my own using <span id="inline-icon" set:html={siRust.svg} /> Rust.
+            I've built up a speciality for <span id="inline-icon" set:html={siGo.svg} /> backend development, however I also built a quite some experience in frontend animations <span id="inline-icon" set:html={siFramer.svg} /> and design.
+            Check out my blog to hear my rants and thoughts on pretty much everything.
         </p>
     </div>
     <div class="my-5 md:w-2/3 w-full">
-        <h2 class="pb-3 md:text-2xl text-xl font-bold"><Char /> show_blog_posts();</h2>
+        <h2 class="pb-3 md:text-2xl text-xl font-bold font-geist-mono"><Char /> show_blog_posts();</h2>
         <div>
             {
                 posts.slice(0, 8).map((post) => (
