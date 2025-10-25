@@ -14,6 +14,11 @@ const meta = post?.data;
 ---
 
 <Base title={meta?.title} emoji={meta?.emoji} color={meta?.color}>
+  {
+    meta?.bg && (
+      <div class="fixed inset-0 -z-10 w-full h-full light:block dark:hidden" style={`background-color: ${meta.bg};`} />
+    )
+  }
   <div class="md:px-2">
     <h1 class="md:text-4xl text-3xl font-black">
       {meta?.title}

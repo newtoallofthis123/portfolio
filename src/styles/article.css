@@ -7,9 +7,7 @@
 
 .article a {
     font-weight: 700;
-    color: #000;
-    background: #d3d3d3;
-    padding: 0.1rem;
+    text-decoration: underline;
 }
 
 .article a:hover {

@@ -137,11 +137,13 @@ const BASE_URL = "http://" + Astro.url.host;
     </main>
   </body>
   <script is:inline>
-    const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
-    let theme = prefersDarkScheme.matches ? "dark" : "light";
+    // const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+    // let theme = prefersDarkScheme.matches ? "dark" : "light";
     let localTheme = localStorage.getItem("theme");
     if (localTheme) {
       theme = localTheme;
+    } else{
+      theme = "light"
     }
     console.log(theme);
     document.documentElement.classList.toggle("dark", theme === "dark");
