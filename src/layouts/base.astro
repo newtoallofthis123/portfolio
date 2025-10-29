@@ -28,7 +28,7 @@ import {
 } from "simple-icons";
 import { ClientRouter } from "astro:transitions";
 import { ToolTip } from "@/components/ToolTip";
-const BASE_URL = "http://" + Astro.url.host;
+const BASE_URL = Astro.url.origin;
 ---
 
 <!doctype html>
@@ -59,15 +59,15 @@ const BASE_URL = "http://" + Astro.url.host;
     />
     <meta name="author" content="NoobScience" />
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={BASE_URL} />
-    <meta property="twitter:title" content="NoobScience" />
+    <meta property="twitter:url" content={Astro.url.href} />
+    <meta property="twitter:title" content={title || "NoobScience"} />
     <meta
       property="twitter:description"
       content={description || "Student and Linux Guy. Working on Rust and Go."}
     />
     <meta property="twitter:image" content={BASE_URL + img} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={BASE_URL} />
+    <meta property="og:url" content={Astro.url.href} />
     <meta property="og:title" content={title || "NoobScience"} />
     <meta
       property="og:description"
