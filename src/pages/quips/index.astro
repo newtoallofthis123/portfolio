@@ -1,11 +1,6 @@
 ---
 import Base from "../../layouts/base.astro";
 import Char from "../../spans/char.astro";
-import { connectToDatabase, type Database } from "../../utils/db";
-
-const { db }: { db: Database } = await connectToDatabase();
-const data = await db.collection("page").find().toArray();
-if (data == null) return Astro.redirect("/404");
 ---
 
 <Base title="Noob's Quips">
@@ -16,5 +11,9 @@ if (data == null) return Astro.redirect("/404");
     Quips is my little corner on the internet where I share the most random
     things that come to my mind. So be prepared for a lot of thoughts lol.
   </div>
-  <div></div>
+  <div>
+    <p class="pt-4 dark:text-rosePine-subtle text-rosePineDawn-subtle">
+      Quips are currently being migrated to a new platform. Check back soon!
+    </p>
+  </div>
 </Base>

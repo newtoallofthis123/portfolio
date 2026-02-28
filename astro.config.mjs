@@ -1,5 +1,5 @@
 import { defineConfig, fontProviders } from "astro/config";
-import vercel from "@astrojs/vercel";
+import cloudflare from "@astrojs/cloudflare";
 import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import sitemap from "@astrojs/sitemap";
@@ -9,11 +9,9 @@ import mdx from "@astrojs/mdx";
 // https://astro.build/config
 export default defineConfig({
   output: "server",
+  adapter: cloudflare(),
   prefetch: true,
   site: "https://www.noobscience.in",
-  adapter: vercel({
-    webAnalytics: { enabled: true },
-  }),
   integrations: [react(), tailwind(), mdx(), sitemap()],
   markdown: {
     gfm: true,
